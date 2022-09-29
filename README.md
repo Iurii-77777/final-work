@@ -73,7 +73,7 @@ devops-diplom-yandexcloud
 
 Есть зарегистрированное имя `ru-devops.ru` у регистратора `reg.ru`.
 
-![1](screenshot/01.pgn)
+![Screenshot](screenshot/01.pgn)
 
 Делегировал его `DNS` на `ns1.yandexcloud.net` и `ns2.yandexcloud.net`.
 
