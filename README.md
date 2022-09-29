@@ -236,7 +236,7 @@ resource "yandex_vpc_subnet" "net-102" {
 
 Репозиторий с конфигурациями terraform [здесь](./terraform)
 
-Сначала из каталога `s3`, для создания бакета в `YC`
+Из каталога `stage` запускаем
 
 ```bash
 export YC_TOKEN=$(yc config get token)
@@ -249,144 +249,455 @@ terraform apply --auto-approve
 <summary>Вывод terraform</summary>
 
 ```bash
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$ terraform plan
+Running plan in the remote backend. Output will stream here. Pressing Ctrl-C
+will stop streaming the logs, but will not stop the plan running remotely.
 
-user@user-ubuntu:~/devops/diplom/s3$ terraform init&& terraform plan&& terraform apply -auto-approve
+Preparing the remote plan...
 
-Initializing the backend...
+To view this run in a browser, visit:
+https://app.terraform.io/app/devopsnetology/stage/runs/run-C2SzdwnnFkfxER7A
 
-Initializing provider plugins...
-- Reusing previous version of yandex-cloud/yandex from the dependency lock file
-- Using previously-installed yandex-cloud/yandex v0.78.1
+Waiting for the plan to start...
 
-Terraform has been successfully initialized!
+Terraform v1.2.9
+on linux_amd64
+Initializing plugins and modules...
+fakewebservices_server.servers[1]: Refreshing state... [id=fakeserver-PbrAaQyNNga721Vk]
+fakewebservices_server.servers[0]: Refreshing state... [id=fakeserver-HL9EiboE2uYQKh2k]
+fakewebservices_vpc.primary_vpc: Refreshing state... [id=fakevpc-74Q4gJX1PRBshw1y]
+fakewebservices_load_balancer.primary_lb: Refreshing state... [id=fakelb-Bge5ZJ5nLwjYFkpq]
+fakewebservices_database.prod_db: Refreshing state... [id=fakedb-iVRVVx7yewbT6ZT4]
 
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  - destroy
 
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
-data.yandex_iam_service_account.my-netology: Reading...
-data.yandex_iam_service_account.my-netology: Read complete after 0s [id=ajesg66dg5r1ahte7mqd]
+Terraform will perform the following actions:
 
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+  # fakewebservices_database.prod_db will be destroyed
+  # (because fakewebservices_database.prod_db is not in configuration)
+  - resource "fakewebservices_database" "prod_db" {
+      - id   = "fakedb-iVRVVx7yewbT6ZT4" -> null
+      - name = "Production DB" -> null
+      - size = 256 -> null
+    }
+
+  # fakewebservices_load_balancer.primary_lb will be destroyed
+  # (because fakewebservices_load_balancer.primary_lb is not in configuration)
+  - resource "fakewebservices_load_balancer" "primary_lb" {
+      - id      = "fakelb-Bge5ZJ5nLwjYFkpq" -> null
+      - name    = "Primary Load Balancer" -> null
+      - servers = [
+          - "Server 1",
+          - "Server 2",
+        ] -> null
+    }
+
+  # fakewebservices_server.servers[0] will be destroyed
+  # (because fakewebservices_server.servers is not in configuration)
+  - resource "fakewebservices_server" "servers" {
+      - id   = "fakeserver-HL9EiboE2uYQKh2k" -> null
+      - name = "Server 1" -> null
+      - type = "t2.micro" -> null
+      - vpc  = "Primary VPC" -> null
+    }
+
+  # fakewebservices_server.servers[1] will be destroyed
+  # (because fakewebservices_server.servers is not in configuration)
+  - resource "fakewebservices_server" "servers" {
+      - id   = "fakeserver-PbrAaQyNNga721Vk" -> null
+      - name = "Server 2" -> null
+      - type = "t2.micro" -> null
+      - vpc  = "Primary VPC" -> null
+    }
+
+  # fakewebservices_vpc.primary_vpc will be destroyed
+  # (because fakewebservices_vpc.primary_vpc is not in configuration)
+  - resource "fakewebservices_vpc" "primary_vpc" {
+      - cidr_block = "0.0.0.0/1" -> null
+      - id         = "fakevpc-74Q4gJX1PRBshw1y" -> null
+      - name       = "Primary VPC" -> null
+    }
+
+  # yandex_dns_recordset.alertmanager will be created
+  + resource "yandex_dns_recordset" "alertmanager" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "alertmanager.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.def will be created
+  + resource "yandex_dns_recordset" "def" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "@.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.gitlab will be created
+  + resource "yandex_dns_recordset" "gitlab" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "gitlab.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.grafana will be created
+  + resource "yandex_dns_recordset" "grafana" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "grafana.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.prometheus will be created
+  + resource "yandex_dns_recordset" "prometheus" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "prometheus.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.www will be created
+  + resource "yandex_dns_recordset" "www" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "www.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_zone.finalwork will be created
+  + resource "yandex_dns_zone" "finalwork" {
+      + created_at       = (known after apply)
+      + description      = "For Netology public zone"
+      + folder_id        = (known after apply)
+      + id               = (known after apply)
+      + labels           = {
+          + "label1" = "works-public"
+        }
+      + name             = "my-finalwork-zone"
+      + private_networks = (known after apply)
+      + public           = true
+      + zone             = "ru-devops.ru."
+    }
+
+  # yandex_vpc_address.addr will be created
+  + resource "yandex_vpc_address" "addr" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "ip-stage"
+      + reserved   = (known after apply)
+      + used       = (known after apply)
+
+      + external_ipv4_address {
+          + address                  = (known after apply)
+          + ddos_protection_provider = (known after apply)
+          + outgoing_smtp_capability = (known after apply)
+          + zone_id                  = "ru-central1-a"
+        }
+    }
+
+  # yandex_vpc_network.default will be created
+  + resource "yandex_vpc_network" "default" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "net-stage"
+      + subnet_ids                = (known after apply)
+    }
+
+  # yandex_vpc_route_table.route-table will be created
+  + resource "yandex_vpc_route_table" "route-table" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "nat-instance-route"
+      + network_id = (known after apply)
+
+      + static_route {
+          + destination_prefix = "0.0.0.0/0"
+          + next_hop_address   = "192.168.101.100"
+        }
+    }
+
+  # yandex_vpc_subnet.net-101 will be created
+  + resource "yandex_vpc_subnet" "net-101" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-stage-101"
+      + network_id     = (known after apply)
+      + route_table_id = (known after apply)
+      + v4_cidr_blocks = [
+          + "192.168.101.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
+
+  # yandex_vpc_subnet.net-102 will be created
+  + resource "yandex_vpc_subnet" "net-102" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-stage-102"
+      + network_id     = (known after apply)
+      + route_table_id = (known after apply)
+      + v4_cidr_blocks = [
+          + "192.168.102.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-b"
+    }
+
+Plan: 12 to add, 0 to change, 5 to destroy.
+
+
+------------------------------------------------------------------------
+
+Cost estimation:
+
+Resources: 0 of 12 estimated
+           $0.0/mo +$0.0
+
+
+ 
+ 
+
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$ terraform apply --auto-approve
+Running apply in the remote backend. Output will stream here. Pressing Ctrl-C
+will cancel the remote apply if it's still pending. If the apply started it
+will stop streaming the logs, but will not stop the apply running remotely.
+
+Preparing the remote apply...
+
+To view this run in a browser, visit:
+https://app.terraform.io/app/devopsnetology/stage/runs/run-TFpm7fscS9csnWpV
+
+Waiting for the plan to start...
+
+Terraform v1.2.9
+on linux_amd64
+Initializing plugins and modules...
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
   + create
 
 Terraform will perform the following actions:
 
-  # yandex_iam_service_account_static_access_key.sa-static-key will be created
-  + resource "yandex_iam_service_account_static_access_key" "sa-static-key" {
-      + access_key           = (known after apply)
-      + created_at           = (known after apply)
-      + description          = "static access key for object storage"
-      + encrypted_secret_key = (known after apply)
-      + id                   = (known after apply)
-      + key_fingerprint      = (known after apply)
-      + secret_key           = (sensitive value)
-      + service_account_id   = "ajesg66dg5r1ahte7mqd"
+  # yandex_dns_recordset.alertmanager will be created
+  + resource "yandex_dns_recordset" "alertmanager" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "alertmanager.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
     }
 
-  # yandex_storage_bucket.state will be created
-  + resource "yandex_storage_bucket" "state" {
-      + access_key            = (known after apply)
-      + acl                   = "private"
-      + bucket                = "my-netology-bucket"
-      + bucket_domain_name    = (known after apply)
-      + default_storage_class = (known after apply)
-      + folder_id             = (known after apply)
-      + force_destroy         = true
-      + id                    = (known after apply)
-      + secret_key            = (sensitive value)
-      + website_domain        = (known after apply)
-      + website_endpoint      = (known after apply)
+  # yandex_dns_recordset.def will be created
+  + resource "yandex_dns_recordset" "def" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "@.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
 
-      + anonymous_access_flags {
-          + list = (known after apply)
-          + read = (known after apply)
+  # yandex_dns_recordset.gitlab will be created
+  + resource "yandex_dns_recordset" "gitlab" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "gitlab.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.grafana will be created
+  + resource "yandex_dns_recordset" "grafana" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "grafana.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.prometheus will be created
+  + resource "yandex_dns_recordset" "prometheus" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "prometheus.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_recordset.www will be created
+  + resource "yandex_dns_recordset" "www" {
+      + data    = (known after apply)
+      + id      = (known after apply)
+      + name    = "www.ru-devops.ru."
+      + ttl     = 200
+      + type    = "A"
+      + zone_id = (known after apply)
+    }
+
+  # yandex_dns_zone.finalwork will be created
+  + resource "yandex_dns_zone" "finalwork" {
+      + created_at       = (known after apply)
+      + description      = "For Netology public zone"
+      + folder_id        = (known after apply)
+      + id               = (known after apply)
+      + labels           = {
+          + "label1" = "works-public"
         }
+      + name             = "my-finalwork-zone"
+      + private_networks = (known after apply)
+      + public           = true
+      + zone             = "ru-devops.ru."
+    }
 
-      + versioning {
-          + enabled = (known after apply)
+  # yandex_vpc_address.addr will be created
+  + resource "yandex_vpc_address" "addr" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "ip-stage"
+      + reserved   = (known after apply)
+      + used       = (known after apply)
+
+      + external_ipv4_address {
+          + address                  = (known after apply)
+          + ddos_protection_provider = (known after apply)
+          + outgoing_smtp_capability = (known after apply)
+          + zone_id                  = "ru-central1-a"
         }
     }
 
-Plan: 2 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + access_key = (sensitive value)
-  + secret_key = (sensitive value)
-
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
-data.yandex_iam_service_account.my-netology: Reading...
-data.yandex_iam_service_account.my-netology: Read complete after 0s [id=ajesg66dg5r1ahte7mqd]
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
-
-  # yandex_iam_service_account_static_access_key.sa-static-key will be created
-  + resource "yandex_iam_service_account_static_access_key" "sa-static-key" {
-      + access_key           = (known after apply)
-      + created_at           = (known after apply)
-      + description          = "static access key for object storage"
-      + encrypted_secret_key = (known after apply)
-      + id                   = (known after apply)
-      + key_fingerprint      = (known after apply)
-      + secret_key           = (sensitive value)
-      + service_account_id   = "ajesg66dg5r1ahte7mqd"
+  # yandex_vpc_network.default will be created
+  + resource "yandex_vpc_network" "default" {
+      + created_at                = (known after apply)
+      + default_security_group_id = (known after apply)
+      + folder_id                 = (known after apply)
+      + id                        = (known after apply)
+      + labels                    = (known after apply)
+      + name                      = "net-stage"
+      + subnet_ids                = (known after apply)
     }
 
-  # yandex_storage_bucket.state will be created
-  + resource "yandex_storage_bucket" "state" {
-      + access_key            = (known after apply)
-      + acl                   = "private"
-      + bucket                = "my-netology-bucket"
-      + bucket_domain_name    = (known after apply)
-      + default_storage_class = (known after apply)
-      + folder_id             = (known after apply)
-      + force_destroy         = true
-      + id                    = (known after apply)
-      + secret_key            = (sensitive value)
-      + website_domain        = (known after apply)
-      + website_endpoint      = (known after apply)
+  # yandex_vpc_route_table.route-table will be created
+  + resource "yandex_vpc_route_table" "route-table" {
+      + created_at = (known after apply)
+      + folder_id  = (known after apply)
+      + id         = (known after apply)
+      + labels     = (known after apply)
+      + name       = "nat-instance-route"
+      + network_id = (known after apply)
 
-      + anonymous_access_flags {
-          + list = (known after apply)
-          + read = (known after apply)
-        }
-
-      + versioning {
-          + enabled = (known after apply)
+      + static_route {
+          + destination_prefix = "0.0.0.0/0"
+          + next_hop_address   = "192.168.101.100"
         }
     }
 
-Plan: 2 to add, 0 to change, 0 to destroy.
+  # yandex_vpc_subnet.net-101 will be created
+  + resource "yandex_vpc_subnet" "net-101" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-stage-101"
+      + network_id     = (known after apply)
+      + route_table_id = (known after apply)
+      + v4_cidr_blocks = [
+          + "192.168.101.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-a"
+    }
 
-Changes to Outputs:
-  + access_key = (sensitive value)
-  + secret_key = (sensitive value)
-yandex_iam_service_account_static_access_key.sa-static-key: Creating...
-yandex_iam_service_account_static_access_key.sa-static-key: Creation complete after 0s [id=ajevatl8bfcpe66f6s6f]
-yandex_storage_bucket.state: Creating...
-yandex_storage_bucket.state: Still creating... [10s elapsed]
-yandex_storage_bucket.state: Still creating... [20s elapsed]
-yandex_storage_bucket.state: Still creating... [30s elapsed]
-yandex_storage_bucket.state: Still creating... [40s elapsed]
-yandex_storage_bucket.state: Still creating... [50s elapsed]
-yandex_storage_bucket.state: Still creating... [1m0s elapsed]
-yandex_storage_bucket.state: Creation complete after 1m1s [id=my-netology-bucket]
+  # yandex_vpc_subnet.net-102 will be created
+  + resource "yandex_vpc_subnet" "net-102" {
+      + created_at     = (known after apply)
+      + folder_id      = (known after apply)
+      + id             = (known after apply)
+      + labels         = (known after apply)
+      + name           = "subnet-stage-102"
+      + network_id     = (known after apply)
+      + route_table_id = (known after apply)
+      + v4_cidr_blocks = [
+          + "192.168.102.0/24",
+        ]
+      + v6_cidr_blocks = (known after apply)
+      + zone           = "ru-central1-b"
+    }
 
-Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+Plan: 12 to add, 0 to change, 0 to destroy.
 
-Outputs:
 
-access_key = <sensitive>
-secret_key = <sensitive>
+------------------------------------------------------------------------
 
+Cost estimation:
+
+Resources: 0 of 12 estimated
+           $0.0/mo +$0.0
+
+------------------------------------------------------------------------
+
+yandex_vpc_address.addr: Creating...
+yandex_vpc_address.addr: Creation complete after 4s [id=e9bhqtc1gs3acllspt6g]
+yandex_vpc_network.default: Creation complete after 4s [id=enpvdok1djbf74a51m82]
+yandex_vpc_route_table.route-table: Creating...
+yandex_vpc_route_table.route-table: Creation complete after 1s [id=enpva1gcv9hl90q64mfu]
+yandex_vpc_subnet.net-102: Creating...
+yandex_vpc_subnet.net-101: Creating...
+yandex_vpc_subnet.net-102: Creation complete after 1s [id=e2l51ncp5h54g4juefef]
+yandex_vpc_subnet.net-101: Creation complete after 2s [id=e9bqimvlg0mkfd7vquum]
+yandex_dns_zone.finalwork: Creating...
+yandex_dns_zone.finalwork: Creation complete after 2s [id=dns2ptrh3ekfjdinodgo]
+yandex_dns_recordset.grafana: Creating...
+yandex_dns_recordset.gitlab: Creating...
+yandex_dns_recordset.def: Creating...
+yandex_dns_recordset.prometheus: Creating...
+yandex_dns_recordset.alertmanager: Creating...
+yandex_dns_recordset.www: Creating...
+yandex_dns_recordset.grafana: Creation complete after 0s [id=dns2ptrh3ekfjdinodgo/grafana.ru-devops.ru./A]
+yandex_dns_recordset.gitlab: Creation complete after 0s [id=dns2ptrh3ekfjdinodgo/gitlab.ru-devops.ru./A]
+yandex_dns_recordset.www: Creation complete after 1s [id=dns2ptrh3ekfjdinodgo/www.ru-devops.ru./A]
+yandex_dns_recordset.alertmanager: Creation complete after 1s [id=dns2ptrh3ekfjdinodgo/alertmanager.ru-devops.ru./A]
+yandex_dns_recordset.prometheus: Creation complete after 1s [id=dns2ptrh3ekfjdinodgo/prometheus.ru-devops.ru./A]
+yandex_dns_recordset.def: Creation complete after 1s [id=dns2ptrh3ekfjdinodgo/@.ru-devops.ru./A]
+
+Apply complete! Resources: 12 added, 0 changed, 0 destroyed.
+
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$ 
 
 ```
 
