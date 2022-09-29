@@ -703,11 +703,8 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$
 
 </details>
 
-![11](img/img011.PNG)
 
-Из файла `terraform.tfstate` берем значения `access_key` и `secret_key` и заносим их в файл `main.tf` каталога `stage`.
-
-Далее из каталога `stage`
+Далее добавляем файлы .tf с нужными нам характеристиками для создания виртуальных машин 
 
 ```bash
 export YC_TOKEN=$(yc config get token)
@@ -722,56 +719,37 @@ terraform output -json > output.json
 <details>
 <summary>Вывод terraform</summary>
 
-```bash
+```
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$ terraform apply --auto-approve
+Running apply in the remote backend. Output will stream here. Pressing Ctrl-C
+will cancel the remote apply if it's still pending. If the apply started it
+will stop streaming the logs, but will not stop the apply running remotely.
 
-user@user-ubuntu:~/devops/diplom/stage$ terraform init -reconfigure&& terraform workspace new stage&& terraform init -reconfigure&& terraform plan&& terraform apply --auto-approve&& terraform output -json > output.json
+Preparing the remote apply...
 
-Initializing the backend...
+To view this run in a browser, visit:
+https://app.terraform.io/app/devopsnetology/stage/runs/run-D2tcywUaSRPv8hmL
 
-Successfully configured the backend "s3"! Terraform will automatically
-use this backend unless the backend configuration changes.
+Waiting for the plan to start...
 
-Initializing provider plugins...
-- Reusing previous version of yandex-cloud/yandex from the dependency lock file
-- Using previously-installed yandex-cloud/yandex v0.78.1
+Terraform v1.2.9
+on linux_amd64
+Initializing plugins and modules...
+yandex_vpc_network.default: Refreshing state... [id=enpvdok1djbf74a51m82]
+yandex_vpc_address.addr: Refreshing state... [id=e9bhqtc1gs3acllspt6g]
+yandex_vpc_route_table.route-table: Refreshing state... [id=enpva1gcv9hl90q64mfu]
+yandex_vpc_subnet.net-102: Refreshing state... [id=e2l51ncp5h54g4juefef]
+yandex_vpc_subnet.net-101: Refreshing state... [id=e9bqimvlg0mkfd7vquum]
+yandex_dns_zone.finalwork: Refreshing state... [id=dns2ptrh3ekfjdinodgo]
+yandex_dns_recordset.www: Refreshing state... [id=dns2ptrh3ekfjdinodgo/www.ru-devops.ru./A]
+yandex_dns_recordset.prometheus: Refreshing state... [id=dns2ptrh3ekfjdinodgo/prometheus.ru-devops.ru./A]
+yandex_dns_recordset.def: Refreshing state... [id=dns2ptrh3ekfjdinodgo/@.ru-devops.ru./A]
+yandex_dns_recordset.grafana: Refreshing state... [id=dns2ptrh3ekfjdinodgo/grafana.ru-devops.ru./A]
+yandex_dns_recordset.gitlab: Refreshing state... [id=dns2ptrh3ekfjdinodgo/gitlab.ru-devops.ru./A]
+yandex_dns_recordset.alertmanager: Refreshing state... [id=dns2ptrh3ekfjdinodgo/alertmanager.ru-devops.ru./A]
 
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
-Created and switched to workspace "stage"!
-
-You're now on a new, empty workspace. Workspaces isolate their state,
-so if you run "terraform plan" Terraform will not see any existing state
-for this configuration.
-
-Initializing the backend...
-
-Successfully configured the backend "s3"! Terraform will automatically
-use this backend unless the backend configuration changes.
-
-Initializing provider plugins...
-- Reusing previous version of yandex-cloud/yandex from the dependency lock file
-- Using previously-installed yandex-cloud/yandex v0.78.1
-
-Terraform has been successfully initialized!
-
-You may now begin working with Terraform. Try running "terraform plan" to see
-any changes that are required for your infrastructure. All Terraform commands
-should now work.
-
-If you ever set or change modules or backend configuration for Terraform,
-rerun this command to reinitialize your working directory. If you forget, other
-commands will detect it and remind you to do so if necessary.
-data.yandex_iam_service_account.my-netology: Reading...
-data.yandex_iam_service_account.my-netology: Read complete after 0s [id=ajesg66dg5r1ahte7mqd]
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
   + create
 
 Terraform will perform the following actions:
@@ -782,18 +760,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "app.ovirt.ru"
+      + hostname                  = "app.ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -813,7 +791,7 @@ Terraform will perform the following actions:
           + initialize_params {
               + block_size  = (known after apply)
               + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
+              + image_id    = "fd8autg36kchufhej85b"
               + name        = (known after apply)
               + size        = 10
               + snapshot_id = (known after apply)
@@ -832,7 +810,7 @@ Terraform will perform the following actions:
           + nat_ip_address     = (known after apply)
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e2l51ncp5h54g4juefef"
         }
 
       + placement_policy {
@@ -857,18 +835,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "db01.ovirt.ru"
+      + hostname                  = "db01.ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -888,7 +866,7 @@ Terraform will perform the following actions:
           + initialize_params {
               + block_size  = (known after apply)
               + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
+              + image_id    = "fd8autg36kchufhej85b"
               + name        = (known after apply)
               + size        = 10
               + snapshot_id = (known after apply)
@@ -907,7 +885,7 @@ Terraform will perform the following actions:
           + nat_ip_address     = (known after apply)
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e2l51ncp5h54g4juefef"
         }
 
       + placement_policy {
@@ -932,18 +910,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "db02.ovirt.ru"
+      + hostname                  = "db02.ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -963,7 +941,7 @@ Terraform will perform the following actions:
           + initialize_params {
               + block_size  = (known after apply)
               + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
+              + image_id    = "fd8autg36kchufhej85b"
               + name        = (known after apply)
               + size        = 10
               + snapshot_id = (known after apply)
@@ -982,7 +960,7 @@ Terraform will perform the following actions:
           + nat_ip_address     = (known after apply)
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e2l51ncp5h54g4juefef"
         }
 
       + placement_policy {
@@ -1007,18 +985,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "gitlab.ovirt.ru"
+      + hostname                  = "gitlab.ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -1057,7 +1035,7 @@ Terraform will perform the following actions:
           + nat_ip_address     = (known after apply)
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e2l51ncp5h54g4juefef"
         }
 
       + placement_policy {
@@ -1082,18 +1060,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "monitoring.ovirt.ru"
+      + hostname                  = "monitoring.ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -1113,7 +1091,7 @@ Terraform will perform the following actions:
           + initialize_params {
               + block_size  = (known after apply)
               + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
+              + image_id    = "fd8autg36kchufhej85b"
               + name        = (known after apply)
               + size        = 10
               + snapshot_id = (known after apply)
@@ -1132,7 +1110,7 @@ Terraform will perform the following actions:
           + nat_ip_address     = (known after apply)
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e2l51ncp5h54g4juefef"
         }
 
       + placement_policy {
@@ -1157,18 +1135,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "ovirt.ru"
+      + hostname                  = "ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -1188,7 +1166,7 @@ Terraform will perform the following actions:
           + initialize_params {
               + block_size  = (known after apply)
               + description = (known after apply)
-              + image_id    = "fd83slullt763d3lo57m"
+              + image_id    = "fd8v7ru46kt3s4o5f0uo"
               + name        = (known after apply)
               + size        = 10
               + snapshot_id = (known after apply)
@@ -1204,10 +1182,10 @@ Terraform will perform the following actions:
           + ipv6_address       = (known after apply)
           + mac_address        = (known after apply)
           + nat                = true
-          + nat_ip_address     = (known after apply)
+          + nat_ip_address     = "51.250.76.154"
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e9bqimvlg0mkfd7vquum"
         }
 
       + placement_policy {
@@ -1232,18 +1210,18 @@ Terraform will perform the following actions:
       + created_at                = (known after apply)
       + folder_id                 = (known after apply)
       + fqdn                      = (known after apply)
-      + hostname                  = "runner.ovirt.ru"
+      + hostname                  = "runner.ru-devops.ru"
       + id                        = (known after apply)
       + metadata                  = {
-          + "user-data" = <<-EOT
+          + "ssh-keys" = <<-EOT
                 #cloud-config
                 users:
-                  - name: user
+                  - name: iurii-devops
                     groups: sudo
                     shell: /bin/bash
                     sudo: ['ALL=(ALL) NOPASSWD:ALL']
                     ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
+                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
                 
             EOT
         }
@@ -1263,7 +1241,7 @@ Terraform will perform the following actions:
           + initialize_params {
               + block_size  = (known after apply)
               + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
+              + image_id    = "fd8autg36kchufhej85b"
               + name        = (known after apply)
               + size        = 10
               + snapshot_id = (known after apply)
@@ -1282,7 +1260,7 @@ Terraform will perform the following actions:
           + nat_ip_address     = (known after apply)
           + nat_ip_version     = (known after apply)
           + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
+          + subnet_id          = "e2l51ncp5h54g4juefef"
         }
 
       + placement_policy {
@@ -1301,960 +1279,70 @@ Terraform will perform the following actions:
         }
     }
 
-  # yandex_dns_recordset.alertmanager will be created
-  + resource "yandex_dns_recordset" "alertmanager" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "alertmanager.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
+Plan: 7 to add, 0 to change, 0 to destroy.
 
-  # yandex_dns_recordset.def will be created
-  + resource "yandex_dns_recordset" "def" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "@.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
 
-  # yandex_dns_recordset.gitlab will be created
-  + resource "yandex_dns_recordset" "gitlab" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "gitlab.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
+------------------------------------------------------------------------
 
-  # yandex_dns_recordset.grafana will be created
-  + resource "yandex_dns_recordset" "grafana" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "grafana.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
+Cost estimation:
 
-  # yandex_dns_recordset.prometheus will be created
-  + resource "yandex_dns_recordset" "prometheus" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "prometheus.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
+Resources: 0 of 19 estimated
+           $0.0/mo +$0.0
 
-  # yandex_dns_recordset.www will be created
-  + resource "yandex_dns_recordset" "www" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "www.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
+------------------------------------------------------------------------
 
-  # yandex_dns_zone.diplom will be created
-  + resource "yandex_dns_zone" "diplom" {
-      + created_at       = (known after apply)
-      + description      = "Diplom Netology public zone"
-      + folder_id        = (known after apply)
-      + id               = (known after apply)
-      + labels           = {
-          + "label1" = "diplom-public"
-        }
-      + name             = "my-diplom-netology-zone"
-      + private_networks = (known after apply)
-      + public           = true
-      + zone             = "ovirt.ru."
-    }
-
-  # yandex_vpc_address.addr will be created
-  + resource "yandex_vpc_address" "addr" {
-      + created_at = (known after apply)
-      + folder_id  = (known after apply)
-      + id         = (known after apply)
-      + labels     = (known after apply)
-      + name       = "ip-stage"
-      + reserved   = (known after apply)
-      + used       = (known after apply)
-
-      + external_ipv4_address {
-          + address                  = (known after apply)
-          + ddos_protection_provider = (known after apply)
-          + outgoing_smtp_capability = (known after apply)
-          + zone_id                  = "ru-central1-a"
-        }
-    }
-
-  # yandex_vpc_network.default will be created
-  + resource "yandex_vpc_network" "default" {
-      + created_at                = (known after apply)
-      + default_security_group_id = (known after apply)
-      + folder_id                 = (known after apply)
-      + id                        = (known after apply)
-      + labels                    = (known after apply)
-      + name                      = "net-stage"
-      + subnet_ids                = (known after apply)
-    }
-
-  # yandex_vpc_route_table.route-table will be created
-  + resource "yandex_vpc_route_table" "route-table" {
-      + created_at = (known after apply)
-      + folder_id  = (known after apply)
-      + id         = (known after apply)
-      + labels     = (known after apply)
-      + name       = "nat-instance-route"
-      + network_id = (known after apply)
-
-      + static_route {
-          + destination_prefix = "0.0.0.0/0"
-          + next_hop_address   = "192.168.101.100"
-        }
-    }
-
-  # yandex_vpc_subnet.net-101 will be created
-  + resource "yandex_vpc_subnet" "net-101" {
-      + created_at     = (known after apply)
-      + folder_id      = (known after apply)
-      + id             = (known after apply)
-      + labels         = (known after apply)
-      + name           = "subnet-stage-101"
-      + network_id     = (known after apply)
-      + route_table_id = (known after apply)
-      + v4_cidr_blocks = [
-          + "192.168.101.0/24",
-        ]
-      + v6_cidr_blocks = (known after apply)
-      + zone           = "ru-central1-a"
-    }
-
-  # yandex_vpc_subnet.net-102 will be created
-  + resource "yandex_vpc_subnet" "net-102" {
-      + created_at     = (known after apply)
-      + folder_id      = (known after apply)
-      + id             = (known after apply)
-      + labels         = (known after apply)
-      + name           = "subnet-stage-102"
-      + network_id     = (known after apply)
-      + route_table_id = (known after apply)
-      + v4_cidr_blocks = [
-          + "192.168.102.0/24",
-        ]
-      + v6_cidr_blocks = (known after apply)
-      + zone           = "ru-central1-b"
-    }
-
-Plan: 19 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + internal_ip_address_app_yandex_cloud        = (known after apply)
-  + internal_ip_address_db01_yandex_cloud       = (known after apply)
-  + internal_ip_address_db02_yandex_cloud       = (known after apply)
-  + internal_ip_address_gitlab_yandex_cloud     = (known after apply)
-  + internal_ip_address_monitoring_yandex_cloud = (known after apply)
-  + internal_ip_address_proxy_lan_yandex_cloud  = "192.168.101.100"
-  + internal_ip_address_proxy_wan_yandex_cloud  = (known after apply)
-  + internal_ip_address_runner_yandex_cloud     = (known after apply)
-  + workspace                                   = "stage"
-
-────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────
-
-Note: You didn't use the -out option to save this plan, so Terraform can't guarantee to take exactly these actions if you run "terraform apply" now.
-data.yandex_iam_service_account.my-netology: Reading...
-data.yandex_iam_service_account.my-netology: Read complete after 0s [id=ajesg66dg5r1ahte7mqd]
-
-Terraform used the selected providers to generate the following execution plan. Resource actions are indicated with the following symbols:
-  + create
-
-Terraform will perform the following actions:
-
-  # yandex_compute_instance.app will be created
-  + resource "yandex_compute_instance" "app" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "app.ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "app"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-b"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = false
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 4
-          + memory        = 4
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_compute_instance.db01 will be created
-  + resource "yandex_compute_instance" "db01" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "db01.ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "db01"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-b"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = false
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 4
-          + memory        = 4
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_compute_instance.db02 will be created
-  + resource "yandex_compute_instance" "db02" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "db02.ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "db02"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-b"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = false
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 4
-          + memory        = 4
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_compute_instance.gitlab will be created
-  + resource "yandex_compute_instance" "gitlab" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "gitlab.ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "gitlab"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-b"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8kdq6d0p8sij7h5qe3"
-              + name        = (known after apply)
-              + size        = 40
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = false
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 4
-          + memory        = 4
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_compute_instance.monitoring will be created
-  + resource "yandex_compute_instance" "monitoring" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "monitoring.ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "monitoring"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-b"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = false
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 4
-          + memory        = 4
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_compute_instance.proxy will be created
-  + resource "yandex_compute_instance" "proxy" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "proxy"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-a"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd83slullt763d3lo57m"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = "192.168.101.100"
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = true
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 2
-          + memory        = 2
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_compute_instance.runner will be created
-  + resource "yandex_compute_instance" "runner" {
-      + allow_stopping_for_update = true
-      + created_at                = (known after apply)
-      + folder_id                 = (known after apply)
-      + fqdn                      = (known after apply)
-      + hostname                  = "runner.ovirt.ru"
-      + id                        = (known after apply)
-      + metadata                  = {
-          + "user-data" = <<-EOT
-                #cloud-config
-                users:
-                  - name: user
-                    groups: sudo
-                    shell: /bin/bash
-                    sudo: ['ALL=(ALL) NOPASSWD:ALL']
-                    ssh_authorized_keys:
-                      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCeOYFLwcOqvWVg6bamtPX/lxjq6wxnI7HBGOkqhusbpZajDbF7OZ0mSAzw4J4xV3rMMW1eimmi/vLTvYh2N91vUegbfleWuh9XfS0Ouv1XYiDiEw1X5wPfj8VwWIIIqSRfCxiO4C7njT+yRfpgJDXLHJ2Oy40c1kmvOPq6fA4zIBpqADAjCcLUS7qv1HIR3+K/v+fiUFUEKSFSKYY7ANsM0ujwjpnPnFpDlDxMkuX/8988zPlwIx2woEJTn8ea9UT0cdkdnIGGO7OVvPW16FoEMbs3ccp9l6Nv8DMFbWhd7Mp4Dkekpj+aLeDvCnQCUtcFZIn6AQ74m5ZwKNISoHZyqWehs7RIOPOEEbmpANEk1l7HZKvV7KvZPh1ucc2wj+prUD1ZRP7meRkwjn6orY80UVm7RP4ENsJYNePgZLmK247JbxVXnT93NpU597F78tOEdqpQPshc0jLDPpQRRfLfT6g3WMxL6yXl3CDiC9yr0FbSOzpcyaH7UsAqLsuozx0= user@user-ubuntu
-                
-            EOT
-        }
-      + name                      = "runner"
-      + network_acceleration_type = "standard"
-      + platform_id               = "standard-v1"
-      + service_account_id        = (known after apply)
-      + status                    = (known after apply)
-      + zone                      = "ru-central1-b"
-
-      + boot_disk {
-          + auto_delete = true
-          + device_name = (known after apply)
-          + disk_id     = (known after apply)
-          + mode        = (known after apply)
-
-          + initialize_params {
-              + block_size  = (known after apply)
-              + description = (known after apply)
-              + image_id    = "fd8uoiksr520scs811jl"
-              + name        = (known after apply)
-              + size        = 10
-              + snapshot_id = (known after apply)
-              + type        = "network-nvme"
-            }
-        }
-
-      + network_interface {
-          + index              = (known after apply)
-          + ip_address         = (known after apply)
-          + ipv4               = true
-          + ipv6               = (known after apply)
-          + ipv6_address       = (known after apply)
-          + mac_address        = (known after apply)
-          + nat                = false
-          + nat_ip_address     = (known after apply)
-          + nat_ip_version     = (known after apply)
-          + security_group_ids = (known after apply)
-          + subnet_id          = (known after apply)
-        }
-
-      + placement_policy {
-          + host_affinity_rules = (known after apply)
-          + placement_group_id  = (known after apply)
-        }
-
-      + resources {
-          + core_fraction = 100
-          + cores         = 4
-          + memory        = 4
-        }
-
-      + scheduling_policy {
-          + preemptible = (known after apply)
-        }
-    }
-
-  # yandex_dns_recordset.alertmanager will be created
-  + resource "yandex_dns_recordset" "alertmanager" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "alertmanager.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
-
-  # yandex_dns_recordset.def will be created
-  + resource "yandex_dns_recordset" "def" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "@.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
-
-  # yandex_dns_recordset.gitlab will be created
-  + resource "yandex_dns_recordset" "gitlab" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "gitlab.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
-
-  # yandex_dns_recordset.grafana will be created
-  + resource "yandex_dns_recordset" "grafana" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "grafana.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
-
-  # yandex_dns_recordset.prometheus will be created
-  + resource "yandex_dns_recordset" "prometheus" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "prometheus.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
-
-  # yandex_dns_recordset.www will be created
-  + resource "yandex_dns_recordset" "www" {
-      + data    = (known after apply)
-      + id      = (known after apply)
-      + name    = "www.ovirt.ru."
-      + ttl     = 200
-      + type    = "A"
-      + zone_id = (known after apply)
-    }
-
-  # yandex_dns_zone.diplom will be created
-  + resource "yandex_dns_zone" "diplom" {
-      + created_at       = (known after apply)
-      + description      = "Diplom Netology public zone"
-      + folder_id        = (known after apply)
-      + id               = (known after apply)
-      + labels           = {
-          + "label1" = "diplom-public"
-        }
-      + name             = "my-diplom-netology-zone"
-      + private_networks = (known after apply)
-      + public           = true
-      + zone             = "ovirt.ru."
-    }
-
-  # yandex_vpc_address.addr will be created
-  + resource "yandex_vpc_address" "addr" {
-      + created_at = (known after apply)
-      + folder_id  = (known after apply)
-      + id         = (known after apply)
-      + labels     = (known after apply)
-      + name       = "ip-stage"
-      + reserved   = (known after apply)
-      + used       = (known after apply)
-
-      + external_ipv4_address {
-          + address                  = (known after apply)
-          + ddos_protection_provider = (known after apply)
-          + outgoing_smtp_capability = (known after apply)
-          + zone_id                  = "ru-central1-a"
-        }
-    }
-
-  # yandex_vpc_network.default will be created
-  + resource "yandex_vpc_network" "default" {
-      + created_at                = (known after apply)
-      + default_security_group_id = (known after apply)
-      + folder_id                 = (known after apply)
-      + id                        = (known after apply)
-      + labels                    = (known after apply)
-      + name                      = "net-stage"
-      + subnet_ids                = (known after apply)
-    }
-
-  # yandex_vpc_route_table.route-table will be created
-  + resource "yandex_vpc_route_table" "route-table" {
-      + created_at = (known after apply)
-      + folder_id  = (known after apply)
-      + id         = (known after apply)
-      + labels     = (known after apply)
-      + name       = "nat-instance-route"
-      + network_id = (known after apply)
-
-      + static_route {
-          + destination_prefix = "0.0.0.0/0"
-          + next_hop_address   = "192.168.101.100"
-        }
-    }
-
-  # yandex_vpc_subnet.net-101 will be created
-  + resource "yandex_vpc_subnet" "net-101" {
-      + created_at     = (known after apply)
-      + folder_id      = (known after apply)
-      + id             = (known after apply)
-      + labels         = (known after apply)
-      + name           = "subnet-stage-101"
-      + network_id     = (known after apply)
-      + route_table_id = (known after apply)
-      + v4_cidr_blocks = [
-          + "192.168.101.0/24",
-        ]
-      + v6_cidr_blocks = (known after apply)
-      + zone           = "ru-central1-a"
-    }
-
-  # yandex_vpc_subnet.net-102 will be created
-  + resource "yandex_vpc_subnet" "net-102" {
-      + created_at     = (known after apply)
-      + folder_id      = (known after apply)
-      + id             = (known after apply)
-      + labels         = (known after apply)
-      + name           = "subnet-stage-102"
-      + network_id     = (known after apply)
-      + route_table_id = (known after apply)
-      + v4_cidr_blocks = [
-          + "192.168.102.0/24",
-        ]
-      + v6_cidr_blocks = (known after apply)
-      + zone           = "ru-central1-b"
-    }
-
-Plan: 19 to add, 0 to change, 0 to destroy.
-
-Changes to Outputs:
-  + internal_ip_address_app_yandex_cloud        = (known after apply)
-  + internal_ip_address_db01_yandex_cloud       = (known after apply)
-  + internal_ip_address_db02_yandex_cloud       = (known after apply)
-  + internal_ip_address_gitlab_yandex_cloud     = (known after apply)
-  + internal_ip_address_monitoring_yandex_cloud = (known after apply)
-  + internal_ip_address_proxy_lan_yandex_cloud  = "192.168.101.100"
-  + internal_ip_address_proxy_wan_yandex_cloud  = (known after apply)
-  + internal_ip_address_runner_yandex_cloud     = (known after apply)
-  + workspace                                   = "stage"
-yandex_vpc_network.default: Creating...
-yandex_vpc_address.addr: Creating...
-yandex_vpc_network.default: Creation complete after 2s [id=enpmc8fl0pnpqr81iv0l]
-yandex_vpc_route_table.route-table: Creating...
-yandex_vpc_address.addr: Creation complete after 2s [id=e9bi2bvda2n2sshdia03]
-yandex_vpc_route_table.route-table: Creation complete after 1s [id=enpaodgt0egahkls4jrh]
-yandex_vpc_subnet.net-101: Creating...
-yandex_vpc_subnet.net-102: Creating...
-yandex_vpc_subnet.net-101: Creation complete after 0s [id=e9bu3c9uuiklj4lkk181]
-yandex_compute_instance.proxy: Creating...
-yandex_vpc_subnet.net-102: Creation complete after 1s [id=e2lpd8q6sffi6jk8827q]
-yandex_dns_zone.diplom: Creating...
-yandex_compute_instance.gitlab: Creating...
-yandex_compute_instance.db01: Creating...
 yandex_compute_instance.db02: Creating...
 yandex_compute_instance.runner: Creating...
 yandex_compute_instance.app: Creating...
-yandex_compute_instance.monitoring: Creating...
-yandex_dns_zone.diplom: Creation complete after 1s [id=dnsa3r3poasr3qvf5u22]
-yandex_dns_recordset.alertmanager: Creating...
-yandex_dns_recordset.www: Creating...
-yandex_dns_recordset.def: Creating...
-yandex_dns_recordset.alertmanager: Creation complete after 1s [id=dnsa3r3poasr3qvf5u22/alertmanager.ovirt.ru./A]
-yandex_dns_recordset.grafana: Creating...
-yandex_dns_recordset.def: Creation complete after 1s [id=dnsa3r3poasr3qvf5u22/@.ovirt.ru./A]
-yandex_dns_recordset.prometheus: Creating...
-yandex_dns_recordset.grafana: Creation complete after 0s [id=dnsa3r3poasr3qvf5u22/grafana.ovirt.ru./A]
-yandex_dns_recordset.gitlab: Creating...
-yandex_dns_recordset.prometheus: Creation complete after 0s [id=dnsa3r3poasr3qvf5u22/prometheus.ovirt.ru./A]
-yandex_dns_recordset.www: Creation complete after 2s [id=dnsa3r3poasr3qvf5u22/www.ovirt.ru./A]
-yandex_dns_recordset.gitlab: Creation complete after 1s [id=dnsa3r3poasr3qvf5u22/gitlab.ovirt.ru./A]
-yandex_compute_instance.proxy: Still creating... [10s elapsed]
+yandex_compute_instance.db01: Creating...
+yandex_compute_instance.gitlab: Creating...
+yandex_compute_instance.proxy: Creating...
+yandex_compute_instance.db02: Still creating... [10s elapsed]
+yandex_compute_instance.monitoring: Still creating... [10s elapsed]
+yandex_compute_instance.db01: Still creating... [10s elapsed]
 yandex_compute_instance.gitlab: Still creating... [10s elapsed]
 yandex_compute_instance.runner: Still creating... [10s elapsed]
-yandex_compute_instance.db02: Still creating... [10s elapsed]
-yandex_compute_instance.db01: Still creating... [10s elapsed]
 yandex_compute_instance.app: Still creating... [10s elapsed]
-yandex_compute_instance.monitoring: Still creating... [10s elapsed]
-yandex_compute_instance.proxy: Still creating... [20s elapsed]
-yandex_compute_instance.gitlab: Still creating... [20s elapsed]
-yandex_compute_instance.db02: Still creating... [20s elapsed]
-yandex_compute_instance.runner: Still creating... [20s elapsed]
-yandex_compute_instance.db01: Still creating... [20s elapsed]
-yandex_compute_instance.app: Still creating... [20s elapsed]
+yandex_compute_instance.proxy: Still creating... [10s elapsed]
 yandex_compute_instance.monitoring: Still creating... [20s elapsed]
-yandex_compute_instance.db01: Creation complete after 25s [id=epd8tdab3jkoirf6j9mu]
-yandex_compute_instance.app: Creation complete after 29s [id=epdtb69rrks8098msq5v]
-yandex_compute_instance.proxy: Still creating... [30s elapsed]
-yandex_compute_instance.gitlab: Still creating... [30s elapsed]
-yandex_compute_instance.runner: Still creating... [30s elapsed]
+yandex_compute_instance.db02: Still creating... [20s elapsed]
+yandex_compute_instance.db01: Still creating... [20s elapsed]
+yandex_compute_instance.runner: Still creating... [20s elapsed]
+yandex_compute_instance.gitlab: Still creating... [20s elapsed]
+yandex_compute_instance.app: Still creating... [20s elapsed]
+yandex_compute_instance.proxy: Still creating... [20s elapsed]
+yandex_compute_instance.db01: Creation complete after 26s [id=epdm9kq50tvic189igm3]
 yandex_compute_instance.db02: Still creating... [30s elapsed]
 yandex_compute_instance.monitoring: Still creating... [30s elapsed]
-yandex_compute_instance.db02: Creation complete after 30s [id=epdsn4dfp5t3v1cdvrvq]
-yandex_compute_instance.gitlab: Creation complete after 32s [id=epdcdnr3qsucsm5j8hfk]
-yandex_compute_instance.monitoring: Creation complete after 32s [id=epddfkiltbe9c3ivhk7q]
-yandex_compute_instance.runner: Creation complete after 32s [id=epdbhs7ktfecphcvvndn]
-yandex_compute_instance.proxy: Creation complete after 33s [id=fhme2i3cssi1hsfb12gi]
+yandex_compute_instance.app: Still creating... [30s elapsed]
+yandex_compute_instance.runner: Still creating... [30s elapsed]
+yandex_compute_instance.gitlab: Still creating... [30s elapsed]
+yandex_compute_instance.proxy: Still creating... [30s elapsed]
+yandex_compute_instance.gitlab: Creation complete after 30s [id=epda7a7dnsbdncn9bvo0]
+yandex_compute_instance.app: Creation complete after 30s [id=epdjaoapd5m99fal7p1m]
+yandex_compute_instance.db02: Creation complete after 30s [id=epdongnhklmevi1bft3f]
+yandex_compute_instance.runner: Creation complete after 31s [id=epdlp32egnfqr8b2k3r7]
+yandex_compute_instance.monitoring: Creation complete after 33s [id=epdhdbsibi1g8umt7h62]
+yandex_compute_instance.proxy: Still creating... [40s elapsed]
+yandex_compute_instance.proxy: Still creating... [50s elapsed]
+yandex_compute_instance.proxy: Creation complete after 54s [id=fhmpvc3hv987ubeksbpo]
 
-Apply complete! Resources: 19 added, 0 changed, 0 destroyed.
+Apply complete! Resources: 7 added, 0 changed, 0 destroyed.
 
-Outputs:
-
-internal_ip_address_app_yandex_cloud = "192.168.102.23"
-internal_ip_address_db01_yandex_cloud = "192.168.102.34"
-internal_ip_address_db02_yandex_cloud = "192.168.102.25"
-internal_ip_address_gitlab_yandex_cloud = "192.168.102.19"
-internal_ip_address_monitoring_yandex_cloud = "192.168.102.29"
-internal_ip_address_proxy_lan_yandex_cloud = "192.168.101.100"
-internal_ip_address_proxy_wan_yandex_cloud = "51.250.66.88"
-internal_ip_address_runner_yandex_cloud = "192.168.102.20"
-workspace = "stage"
-
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$ 
 
 ```
-
 </details>
 
-![12](img/img012.PNG)
+![7](./screenshot/07.png)
 
-По итогу - создаются 7 виртуальных машин (5 - `Ubuntu 22.04`, 1 - `Ubuntu 20.04`, proxy - `ubuntu 18.04 NAT Instance`).
+Cоздаются 7 виртуальных машин.
+Создаётся сеть + две подсети + маршруты между ними (`192.168.101.0/24` и `192.168.102.0/24`).
+Арендуется IP.
 
-Создаются сеть и две подсети `192.168.101.0/24` и `192.168.102.0/24`.
-
-Настраиваются маршруты между ними.
-
-Арендуется белый IP.
-
-Прописываются `DNS` `YC` в соответствии с заданием.
+![8](./screenshot/08.png)
 
 В `output.json` выводится информацию о всех выданных `ip` адресах, для дальнейшего использования с `Ansible`.
-
 Состояние воркспейса `stage` сохраняется в `S3` бакете `YC`.
 
 ![13](img/img013.PNG)
