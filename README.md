@@ -73,7 +73,7 @@ devops-diplom-yandexcloud
 
 Есть зарегистрированное имя `ru-devops.ru` у регистратора `reg.ru`.
 
-![1](screenshot/01.jpg)
+![1](screenshot/01.pgn)
 
 Делегировал его `DNS` на `ns1.yandexcloud.net` и `ns2.yandexcloud.net`.
 
@@ -141,7 +141,7 @@ resource "yandex_dns_recordset" "www" {
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 
 ```
-![2](screenshot/02.jpg)
+![2](screenshot/02.pgn)
 
 
 Так же буду арендовать статический ip у YC автоматически.
@@ -154,7 +154,7 @@ resource "yandex_vpc_address" "addr" {
   }
 }
 ```
-![3](screenshot/03.jpg)
+![3](screenshot/03.pgn)
 
 
 ---
