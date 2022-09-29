@@ -141,7 +141,7 @@ resource "yandex_dns_recordset" "www" {
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 
 ```
-![2][screenshot/02.pgn](./screenshot/02.png)
+![2](./screenshot/02.png)
 
 
 Так же буду арендовать статический ip у YC автоматически.
