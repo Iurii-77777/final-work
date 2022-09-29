@@ -73,76 +73,75 @@ devops-diplom-yandexcloud
 
 Есть зарегистрированное имя `ru-devops.ru` у регистратора `reg.ru`.
 
-![1](img/img001.PNG)
+![1](screenshot/01.jpg)
 
 Делегировал его `DNS` на `ns1.yandexcloud.net` и `ns2.yandexcloud.net`.
 
 ```hcl
-resource "yandex_dns_zone" "diplom" {
-  name        = "my-diplom-netology-zone"
-  description = "Diplom Netology public zone"
+resource "yandex_dns_zone" "finalwork" {
+  name        = "my-finalwork-zone"
+  description = "For Netology public zone"
 
   labels = {
-    label1 = "diplom-public"
+    label1 = "works-public"
   }
 
-  zone    = "ovirt.ru."
+  zone    = "ru-devops.ru."
   public  = true
 
   depends_on = [
     yandex_vpc_subnet.net-101,yandex_vpc_subnet.net-102
   ]
-}
-
+}network
 resource "yandex_dns_recordset" "def" {
-  zone_id = yandex_dns_zone.diplom.id
-  name    = "@.ovirt.ru."
+  zone_id = yandex_dns_zone.finalwork.id
+  name    = "@.ru-devops.ru."
   type    = "A"
   ttl     = 200
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 }
 
 resource "yandex_dns_recordset" "gitlab" {
-  zone_id = yandex_dns_zone.diplom.id
-  name    = "gitlab.ovirt.ru."
+  zone_id = yandex_dns_zone.finalwork.id
+  name    = "gitlab.ru-devops.ru."
   type    = "A"
   ttl     = 200
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 }
 
 resource "yandex_dns_recordset" "alertmanager" {
-  zone_id = yandex_dns_zone.diplom.id
-  name    = "alertmanager.ovirt.ru."
+  zone_id = yandex_dns_zone.finalwork.id
+  name    = "alertmanager.ru-devops.ru."
   type    = "A"
   ttl     = 200
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 }
 
 resource "yandex_dns_recordset" "grafana" {
-  zone_id = yandex_dns_zone.diplom.id
-  name    = "grafana.ovirt.ru."
+  zone_id = yandex_dns_zone.finalwork.id
+  name    = "grafana.ru-devops.ru."
   type    = "A"
   ttl     = 200
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 }
 
 resource "yandex_dns_recordset" "prometheus" {
-  zone_id = yandex_dns_zone.diplom.id
-  name    = "prometheus.ovirt.ru."
+  zone_id = yandex_dns_zone.finalwork.id
+  name    = "prometheus.ru-devops.ru."
   type    = "A"
   ttl     = 200
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
 }
 
 resource "yandex_dns_recordset" "www" {
-  zone_id = yandex_dns_zone.diplom.id
-  name    = "www.ovirt.ru."
+  zone_id = yandex_dns_zone.finalwork.id
+  name    = "www.ru-devops.ru."
   type    = "A"
   ttl     = 200
   data    = [yandex_vpc_address.addr.external_ipv4_address[0].address]
-}
-```
 
+```
+![2](screenshot/02.jpg)
 
 
 Так же буду арендовать статический ip у YC автоматически.
@@ -155,7 +154,7 @@ resource "yandex_vpc_address" "addr" {
   }
 }
 ```
-
+![3](screenshot/03.jpg)
 
 
 ---
