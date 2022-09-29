@@ -1367,14 +1367,51 @@ envsubst < hosts.j2 > ../../ansible/hosts
 
 Где с помощью `jq` вычленяются нужные данные из файла `output.json` и помещаются в пересенные среды, а затем при помощи `envsubst` заполняется шаблон `hosts.j2` с хостами для `Ansible` и копируется в директорию с `Ansible`. 
 
-![13](img/img013.PNG)
+Итоговый файл ../ansible/hosts:
+```
+[proxy]
+ru-devops.ru letsencrypt_email=steamdrago777@gmail.com domain_name=ru-devops.ru
+[proxy:vars]
+ansible_host=51.250.76.154
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
-![14](img/img014.PNG)
+[db01]
+db01.ru-devops.ru mysql_server_id=1 mysql_replication_role=master
+[db01:vars]
+ansible_host=192.168.102.29
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 
-![15](img/img015.PNG)
+[db02]
+db02.ru-devops.ru mysql_server_id=2 mysql_replication_role=slave
+[db02:vars]
+ansible_host=192.168.102.30
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 
-![16](img/img016.PNG)
+[app]
+app.ru-devops.ru
+[app:vars]
+ansible_host=192.168.102.24
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+#ssh 51.250.15.168 -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W app.ovirt:22 -q user@ru-devops.ru -o StrictHostKeyChecking=no "
 
+[gitlab]
+gitlab.ru-devops.ru domain_name=ru-devops.ru
+[gitlab:vars]
+ansible_host=192.168.102.35
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
+[runner]
+runner.ru-devops.ru domain_name=ru-devops.ru
+[runner:vars]
+ansible_host=192.168.102.21
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
+[monitoring]
+monitoring.ru-devops.ru domain_name=ru-devops.ru
+[monitoring:vars]
+ansible_host=192.168.102.5
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+```
 ---
 
 ---
