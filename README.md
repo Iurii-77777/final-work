@@ -71,11 +71,11 @@ devops-diplom-yandexcloud
 
 ---
 
-Есть зарегистрированное имя `ovirt.ru` у регистратора `webnames.ru`.
+Есть зарегистрированное имя `ru-devops.ru` у регистратора `reg.ru`.
 
 ![1](img/img001.PNG)
 
-Делегировал его `DNS` на `ns1.yandexcloud.net` и `ns2.yandexcloud.net`, т.к. буду использовать `DNS` от `YC`.
+Делегировал его `DNS` на `ns1.yandexcloud.net` и `ns2.yandexcloud.net`.
 
 ```hcl
 resource "yandex_dns_zone" "diplom" {
