@@ -707,9 +707,6 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$
 Далее добавляем файлы .tf с нужными нам характеристиками для создания виртуальных машин 
 
 ```bash
-export YC_TOKEN=$(yc config get token)
-terraform init
-terraform workspace new stage
 terraform init
 terraform plan
 terraform apply --auto-approve
