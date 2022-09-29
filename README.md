@@ -1341,27 +1341,13 @@ Cоздаются 7 виртуальных машин.
 Арендуется IP.
 
 ![8](./screenshot/08.png)
+![9](./screenshot/09.png)
+![10](./screenshot/10.png)
+![11](./screenshot/11.png)
 
 В `output.json` выводится информацию о всех выданных `ip` адресах, для дальнейшего использования с `Ansible`.
-Состояние воркспейса `stage` сохраняется в `S3` бакете `YC`.
-
-![13](img/img013.PNG)
-
-![14](img/img014.PNG)
-
-![15](img/img015.PNG)
-
-![16](img/img016.PNG)
-
 Содержимое `output.tf` вывожу в `output.json`.
-
-Далее используем `envsubst`.
-
-[https://900913.ru/tldr/common/en/envsubst/](https://900913.ru/tldr/common/en/envsubst/)
-
-> Replace environment variables in an input file and output to a file:
-> 
-> `envsubst < {{path/to/input_file}} > {{path/to/output_file}}`
+Далее используем `envsubst`(envsubst < {{path/to/input_file}} > {{path/to/output_file}}`)
 
 Для начала нам нужно из файла `json` достать нужные данные, используем `jq` (о которой я узнал на домашних заданиях ранее, в т.ч. курсовая с `Hasicorp Vault`).
 
@@ -1380,6 +1366,14 @@ envsubst < hosts.j2 > ../../ansible/hosts
 ```
 
 Где с помощью `jq` вычленяются нужные данные из файла `output.json` и помещаются в пересенные среды, а затем при помощи `envsubst` заполняется шаблон `hosts.j2` с хостами для `Ansible` и копируется в директорию с `Ansible`. 
+
+![13](img/img013.PNG)
+
+![14](img/img014.PNG)
+
+![15](img/img015.PNG)
+
+![16](img/img016.PNG)
 
 ---
 
