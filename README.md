@@ -154,7 +154,7 @@ resource "yandex_vpc_address" "addr" {
   }
 }
 ```
-![3](./screenshot/03.pgn)
+![3](./screenshot/03.png)
 
 
 ---
