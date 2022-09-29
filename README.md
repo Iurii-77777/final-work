@@ -232,8 +232,9 @@ resource "yandex_vpc_subnet" "net-102" {
   route_table_id          = yandex_vpc_route_table.route-table.id
 }
 ```
+![6](./screenshot/06.png)
 
-Конфигурации terraform [тут](scripts/terraform/), в процессе могут измениться.
+Репозиторий с конфигурациями terraform [здесь](./terraform)
 
 Сначала из каталога `s3`, для создания бакета в `YC`
 
