@@ -1344,10 +1344,12 @@ Cоздаются 7 виртуальных машин.
 
 В `output.json` выводится информацию о всех выданных `ip` адресах, для дальнейшего использования с `Ansible`.
 Содержимое `output.tf` вывожу в `output.json`.
-Далее используем `envsubst`(envsubst < {{path/to/input_file}} > {{path/to/output_file}}`)
 
-Для начала нам нужно из файла `json` достать нужные данные, используем `jq` (о которой я узнал на домашних заданиях ранее, в т.ч. курсовая с `Hasicorp Vault`).
+```
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/stage$ terraform output -json > output.json
+```
 
+Для начала нам нужно из файла `json` достать нужные данные, используем `jq`.
 Для этого запускаем `hosts.sh` следующего содержания:
 
 ```bash
@@ -1359,7 +1361,7 @@ export internal_ip_address_gitlab_yandex_cloud=$(< output.json jq -r '.internal_
 export internal_ip_address_monitoring_yandex_cloud=$(< output.json jq -r '.internal_ip_address_monitoring_yandex_cloud | .value')
 export internal_ip_address_proxy_wan_yandex_cloud=$(< output.json jq -r '.internal_ip_address_proxy_wan_yandex_cloud | .value')
 export internal_ip_address_runner_yandex_cloud=$(< output.json jq -r '.internal_ip_address_runner_yandex_cloud | .value')
-envsubst < hosts.j2 > ../../ansible/hosts
+envsubst < hosts.j2 > ../ansible/hosts
 ```
 
 Где с помощью `jq` вычленяются нужные данные из файла `output.json` и помещаются в пересенные среды, а затем при помощи `envsubst` заполняется шаблон `hosts.j2` с хостами для `Ansible` и копируется в директорию с `Ansible`. 
@@ -1369,45 +1371,46 @@ envsubst < hosts.j2 > ../../ansible/hosts
 [proxy]
 ru-devops.ru letsencrypt_email=steamdrago777@gmail.com domain_name=ru-devops.ru
 [proxy:vars]
-ansible_host=51.250.76.154
+ansible_host=178.154.222.77
 ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
 
 [db01]
 db01.ru-devops.ru mysql_server_id=1 mysql_replication_role=master
 [db01:vars]
-ansible_host=192.168.102.29
+ansible_host=192.168.102.7
 ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 
 [db02]
 db02.ru-devops.ru mysql_server_id=2 mysql_replication_role=slave
 [db02:vars]
-ansible_host=192.168.102.30
+ansible_host=192.168.102.28
 ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 
 [app]
 app.ru-devops.ru
 [app:vars]
-ansible_host=192.168.102.24
+ansible_host=192.168.102.20
 ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 #ssh 51.250.15.168 -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W app.ovirt:22 -q user@ru-devops.ru -o StrictHostKeyChecking=no "
 
 [gitlab]
 gitlab.ru-devops.ru domain_name=ru-devops.ru
 [gitlab:vars]
-ansible_host=192.168.102.35
+ansible_host=192.168.102.8
 ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 
 [runner]
 runner.ru-devops.ru domain_name=ru-devops.ru
 [runner:vars]
-ansible_host=192.168.102.21
+ansible_host=192.168.102.13
 ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
 
 [monitoring]
 monitoring.ru-devops.ru domain_name=ru-devops.ru
 [monitoring:vars]
-ansible_host=192.168.102.5
+ansible_host=192.168.102.9
 ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
 ```
 ---
 
@@ -1439,89 +1442,208 @@ ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyCheckin
 
 ---
 
-Тут использовал данные материалы:
+Роли взяты из коллекции ansible-galaxy.
 
-https://github.com/coopdevs/certbot_nginx
-
-https://github.com/geerlingguy/ansible-role-certbot/
-
-Если нужно генерировать тестовый, то в дефолтных значениях нужно прописать :
-
+Содержимое файла nginxssl.yml:
 ```yaml
-letsencrypt_staging: true
+- hosts: proxy
+  gather_facts: true
+  become:
+    true
+  become_method:
+    sudo
+  become_user:
+    root
+  remote_user:
+    user
+  roles:
+  - nginxssl
+```
+
+Содержимое файлов конфигурации роли:
+```
+upstream app {
+    server app.ru-devops.ru:80;
+  }
+upstream gitlab {
+    server gitlab.ru-devops.ru:80;
+  }
+upstream grafana {
+    server monitoring.ru-devops.ru:3000;
+  }
+upstream prometheus {
+    server monitoring.ru-devops.ru:9090;
+  }
+upstream alertmanager {
+    server monitoring.ru-devops.ru:9093;
+  }
+server {
+    listen 80;
+    return 301 https://$host$request_uri;
+}
+
+server {
+  listen               443 ssl;
+  server_name          {{ domain_name }} www.{{ domain_name }};
+  access_log           /var/log/nginx/{{ domain_name }}_access.log;
+  error_log            /var/log/nginx/{{ domain_name }}_error.log;
+
+  ssl on;
+  ssl_certificate      /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem; 
+  ssl_certificate_key  /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+  proxy_ssl_server_name on;
+  proxy_ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+  #include              /etc/letsencrypt/options-ssl-nginx.conf;
+  location / {
+    proxy_pass         http://app;
+    proxy_set_header Host $http_host;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Frame-Options SAMEORIGIN;
+  }
+}
+
+server {
+  listen          443 ssl;
+  server_name     gitlab.{{ domain_name }};
+  access_log           /var/log/nginx/gitlab.{{ domain_name }}_access.log;
+  error_log            /var/log/nginx/gitlab.{{ domain_name }}_error.log;
+  ssl_certificate      /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+  ssl_certificate_key  /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+  include              /etc/letsencrypt/options-ssl-nginx.conf;
+  location / {
+    proxy_pass         http://gitlab;
+    proxy_set_header   Host $http_host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Host $http_host;
+    proxy_set_header   X-Forwarded-Proto https;
+  }
+}
+
+server {
+  listen          443 ssl;
+  server_name     grafana.{{ domain_name }};
+  access_log           /var/log/nginx/grafana.{{ domain_name }}_access.log;
+  error_log            /var/log/nginx/grafana.{{ domain_name }}_error.log;
+  ssl_certificate      /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+  ssl_certificate_key  /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+  include              /etc/letsencrypt/options-ssl-nginx.conf;
+  location / {
+    proxy_pass         http://grafana;
+    proxy_set_header   Host $http_host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Host $http_host;
+    proxy_set_header   X-Forwarded-Proto https;
+  }
+}
+
+server {
+  listen          443 ssl;
+  server_name     prometheus.{{ domain_name }};
+  access_log           /var/log/nginx/prometheus.{{ domain_name }}_access_log;
+  error_log            /var/log/nginx/prometheus.{{ domain_name }}_error_log;
+  ssl_certificate      /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+  ssl_certificate_key  /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+  include              /etc/letsencrypt/options-ssl-nginx.conf;
+  location / {
+    proxy_pass         http://prometheus;
+    proxy_set_header   Host $http_host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Host $http_host;
+    proxy_set_header   X-Forwarded-Proto https;
+  }
+}
+
+server {
+  listen          443 ssl;
+  server_name     alertmanager.{{ domain_name }};
+  access_log           /var/log/nginx/alertmanager.{{ domain_name }}_access_log;
+  error_log            /var/log/nginx/alertmanager.{{ domain_name }}_error_log;
+  ssl_certificate      /etc/letsencrypt/live/{{ domain_name }}/fullchain.pem;
+  ssl_certificate_key  /etc/letsencrypt/live/{{ domain_name }}/privkey.pem;
+  include              /etc/letsencrypt/options-ssl-nginx.conf;
+  location / {
+    proxy_pass         http://alertmanager;
+    proxy_set_header   Host $http_host;
+    proxy_set_header   X-Real-IP $remote_addr;
+    proxy_set_header   X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header   X-Forwarded-Host $http_host;
+    proxy_set_header   X-Forwarded-Proto https;
+  }
+}
+
 ```
 
 Переходим в директорию с `Ansible` и выполняем `ansible-playbook nginx.yml -i hosts`
 
-![5](img/img005.PNG)
+![12](./screenshot/12.png)
 
-![6](img/img006.PNG)
+![13](./screenshot/13.png)
 
-![7](img/img007.PNG)
-
-![8](img/img008.PNG)
-
-![9](img/img009.PNG)
-
-![10](img/img010.PNG)
 
 <details>
 <summary>Вывод Ansible</summary>
 
 ```bash
+ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ls
+hosts  nginxssl.yml  roles
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook nginxssl.yml -i hosts
 
-user@user-ubuntu:~/devops/diplom/ansible$ ansible-playbook proxy.yml -i hosts
+PLAY [proxy] **********************************************************************************************************************************************************
 
-PLAY [proxy] ********************************************************************************************************************************************************************
+TASK [Gathering Facts] ************************************************************************************************************************************************
+ok: [ru-devops.ru]
 
-TASK [Gathering Facts] **********************************************************************************************************************************************************
-ok: [ovirt.ru]
+TASK [nginxssl : Install Nginx] ***************************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Install Nginx] ****************************************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Set Certbot package name and versions (Ubuntu >= 20.04)] *********************************************************************************************
+skipping: [ru-devops.ru]
 
-TASK [proxy : Set Certbot package name and versions (Ubuntu >= 20.04)] **********************************************************************************************************
-skipping: [ovirt.ru]
+TASK [nginxssl : Set Certbot package name and versions (Ubuntu < 20.04)] **********************************************************************************************
+ok: [ru-devops.ru]
 
-TASK [proxy : Set Certbot package name and versions (Ubuntu < 20.04)] ***********************************************************************************************************
-ok: [ovirt.ru]
+TASK [nginxssl : Add certbot repository] ******************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Add certbot repository] *******************************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Install certbot] *************************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Install certbot] **************************************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Install certbot-nginx plugin] ************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Install certbot-nginx plugin] *************************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Check if certificate already exists] *****************************************************************************************************************
+ok: [ru-devops.ru]
 
-TASK [proxy : Check if certificate already exists] ******************************************************************************************************************************
-ok: [ovirt.ru]
+TASK [nginxssl : Force generation of a new certificate] ***************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Force generation of a new certificate] ****************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Add cron job for certbot renewal] ********************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Add cron job for certbot renewal] *********************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Add nginx.conf] **************************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Add nginx.conf] ***************************************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Add default site] ************************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Add default site] *************************************************************************************************************************************************
-changed: [ovirt.ru]
+TASK [nginxssl : Add site conf] ***************************************************************************************************************************************
+changed: [ru-devops.ru]
 
-TASK [proxy : Add site conf] ****************************************************************************************************************************************************
-changed: [ovirt.ru]
+RUNNING HANDLER [nginxssl : nginx systemd] ****************************************************************************************************************************
+ok: [ru-devops.ru]
 
-RUNNING HANDLER [proxy : nginx systemd] *****************************************************************************************************************************************
-ok: [ovirt.ru]
+RUNNING HANDLER [nginxssl : nginx restart] ****************************************************************************************************************************
+changed: [ru-devops.ru]
 
-RUNNING HANDLER [proxy : nginx restart] *****************************************************************************************************************************************
-changed: [ovirt.ru]
+PLAY RECAP ************************************************************************************************************************************************************
+ru-devops.ru               : ok=14   changed=10   unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
 
-PLAY RECAP **********************************************************************************************************************************************************************
-ovirt.ru                   : ok=14   changed=10   unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
-
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$  
 
 ```
 
