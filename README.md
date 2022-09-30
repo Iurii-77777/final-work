@@ -1915,7 +1915,7 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 Теперь внесём данные на сайте ru-devops.ru.
 
-И выполним проверку изменений перейдя на сайт www.ru-devops.ru:
+И после выполним проверку изменений перейдя на сайт www.ru-devops.ru:
 
 ![15](./screenshot/15.png)
 
@@ -1954,29 +1954,9 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 ---
 
-Использовал следующие материалы.
+По советам коллег использовал ubuntu 20.04, т.к. в более поздних версиях ОС появляются ошибки в ansible-playbook.
 
-[https://github.com/geerlingguy/ansible-role-gitlab](https://github.com/geerlingguy/ansible-role-gitlab)
-
-
-[https://docs.gitlab.com/ee/administration/environment_variables.html](https://docs.gitlab.com/ee/administration/environment_variables.html)
-
-Долго мучался, т.к. ставил Ubuntu 22.04, получал ошибку
-
-```bash
-TASK [gitlab : Install GitLab] ********************************************************************************************************************************************************
-fatal: [gitlab.ovirt.ru]: FAILED! => {"ansible_job_id": "129742348762.35918", "changed": false, "finished": 1, "msg": "No package matching 'gitlab-ce' is available"}
-
-PLAY RECAP ****************************************************************************************************************************************************************************
-gitlab.ovirt.ru            : ok=7    changed=1    unreachable=0    failed=1    skipped=1    rescued=0    ignored=0   
-```
-
-Рано ее еще ставить, 20.04 нужно пока что:
-
-[https://gitlab.com/gitlab-org/gitlab/-/issues/364673](https://gitlab.com/gitlab-org/gitlab/-/issues/364673)
-
-
-Так же в конфигурацию `gitlab` нужно добавить для корректной работы `node_exporter`:
+Изменяем конфигурацию gitlab для prometheus:
 
 ```bash
 prometheus['enable'] = false
@@ -1985,13 +1965,14 @@ node_exporter['listen_address'] = '0.0.0.0:9100'
 
 ```
 
-Так же дополнительно прописана переменная среды `GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN`, чтобы заранее знать токен для подключения раннеров и не подключать их вручную.
+Для автаматизации добавляем значение переменной окружения `GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN`:
 
 ```bash
-GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN: "{{ gitlab_runners_registration_token }}"
+  environment:
+    GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN: "{{ gitlab_runners_registration_token }}"
 ```
 
-Были проблемы с рутовым паролем, теперь он принудительно устанавливается в `Task`:
+Также после обсуждения в группе, было решено принудительно устанавливать пароль root в `Task`, для избежания дополнительных ошибок:
 
 ```yaml
 - name: use the rails console to change the password
@@ -2000,102 +1981,95 @@ GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN: "{{ gitlab_runners_registration_token 
   notify: restart gitlab
 ```
 
-Выполняем `ansible-playbook gitlab.yml -i hosts`, идем пить кофе, разворачивается не быстро.
+Выполняем `ansible-playbook gitlab.yml -i hosts`:
 
 <details>
 <summary>Вывод Ansible</summary>
 
 ```bash
 
-user@user-ubuntu:~/devops/diplom/ansible$ ansible-playbook gitlab.yml -i hosts
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook gitlab.yml -i hosts
 
-PLAY [gitlab] *******************************************************************************************************************************************************************
+PLAY [gitlab] *****************************************************************************************************************************************************************************************************************
 
-TASK [Gathering Facts] **********************************************************************************************************************************************************
-ok: [gitlab.ovirt.ru]
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************************
+ok: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Check if GitLab configuration file already exists.] **************************************************************************************************************
-ok: [gitlab.ovirt.ru]
+TASK [gitlab : Check if GitLab configuration file already exists.] ************************************************************************************************************************************************************
+ok: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Check if GitLab is already installed.] ***************************************************************************************************************************
-ok: [gitlab.ovirt.ru]
+TASK [gitlab : Check if GitLab is already installed.] *************************************************************************************************************************************************************************
+ok: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Install GitLab dependencies (Debian).] ***************************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : Install GitLab dependencies (Debian).] *************************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Install GitLab dependencies.] ************************************************************************************************************************************
-ok: [gitlab.ovirt.ru] => (item=curl)
-ok: [gitlab.ovirt.ru] => (item=tzdata)
-changed: [gitlab.ovirt.ru] => (item=perl)
-ok: [gitlab.ovirt.ru] => (item=openssl)
-changed: [gitlab.ovirt.ru] => (item=postfix)
-ok: [gitlab.ovirt.ru] => (item=openssh-server)
+TASK [gitlab : Install GitLab dependencies.] **********************************************************************************************************************************************************************************
+ok: [gitlab.ru-devops.ru] => (item=curl)
+ok: [gitlab.ru-devops.ru] => (item=tzdata)
+changed: [gitlab.ru-devops.ru] => (item=perl)
+ok: [gitlab.ru-devops.ru] => (item=openssl)
+changed: [gitlab.ru-devops.ru] => (item=postfix)
+ok: [gitlab.ru-devops.ru] => (item=openssh-server)
 
-TASK [gitlab : Download GitLab repository installation script.] *****************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : Download GitLab repository installation script.] ***************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Install GitLab repository.] **************************************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : Install GitLab repository.] ************************************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Define the Gitlab package name.] *********************************************************************************************************************************
-skipping: [gitlab.ovirt.ru]
+TASK [gitlab : Define the Gitlab package name.] *******************************************************************************************************************************************************************************
+skipping: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Install GitLab] **************************************************************************************************************************************************
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC POLL on gitlab.ovirt.ru: jid=325597879091.5077 started=1 finished=0
-ASYNC OK on gitlab.ovirt.ru: jid=325597879091.5077
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : Install GitLab] ************************************************************************************************************************************************************************************************
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC POLL on gitlab.ru-devops.ru: jid=174065687158.5154 started=1 finished=0
+ASYNC OK on gitlab.ru-devops.ru: jid=174065687158.5154
+changed: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Reconfigure GitLab (first run).] *********************************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : Reconfigure GitLab (first run).] *******************************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Create GitLab SSL configuration folder.] *************************************************************************************************************************
-skipping: [gitlab.ovirt.ru]
+TASK [gitlab : Create GitLab SSL configuration folder.] ***********************************************************************************************************************************************************************
+skipping: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Create self-signed certificate.] *********************************************************************************************************************************
-skipping: [gitlab.ovirt.ru]
+TASK [gitlab : Create self-signed certificate.] *******************************************************************************************************************************************************************************
+skipping: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Fail when Password is shorter than 8 chars] **********************************************************************************************************************
-skipping: [gitlab.ovirt.ru]
+TASK [gitlab : Fail when Password is shorter than 8 chars] ********************************************************************************************************************************************************************
+skipping: [gitlab.ru-devops.ru]
 
-TASK [gitlab : Copy GitLab configuration file.] *********************************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : Copy GitLab configuration file.] *******************************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-TASK [gitlab : use the rails console to change the password] ********************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+TASK [gitlab : use the rails console to change the password] ******************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-RUNNING HANDLER [gitlab : restart gitlab] ***************************************************************************************************************************************
-changed: [gitlab.ovirt.ru]
+RUNNING HANDLER [gitlab : restart gitlab] *************************************************************************************************************************************************************************************
+changed: [gitlab.ru-devops.ru]
 
-PLAY RECAP **********************************************************************************************************************************************************************
-gitlab.ovirt.ru            : ok=12   changed=9    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0 
+PLAY RECAP ********************************************************************************************************************************************************************************************************************
+gitlab.ru-devops.ru        : ok=12   changed=9    unreachable=0    failed=0    skipped=4    rescued=0    ignored=0   
+
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ 
+
 
 ```
 
