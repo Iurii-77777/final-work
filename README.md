@@ -2094,15 +2094,13 @@ To http://gitlab.ru-devops.ru/root/wordpress.git
 
 Первое, в нашем проекте, заходим в `Settings` -> `CI/CD` -> `Variables` и добавляем переменную `ssh_key`, содержащую закрытую часть ключа, для авторизации на сервере `app` с нашего `runner`а.
 
-![26](img/img026.PNG)
+![24](./screenshot/24.png)
 
 Так же в `Settings` -> `CI/CD` -> `Runners` убедимся, что сейчас `runner`ов нет.
 
-![27](img/img027.PNG)
+![25](./screenshot/25.png)
 
 Настраиваем `pipeline`, заходим в `CI/CD` -> `Pipelines` -> `Editor`.
-
-![28](img/img028.PNG)
 
 Жмем `Configure pipeline` и заменяем всё следующим кодом:
 
@@ -2122,14 +2120,14 @@ deploy-job:
   stage: deploy
   script:
     - echo "Deploying files..."
-    - ssh -o StrictHostKeyChecking=no user@app.ovirt.ru sudo chown user /var/www/wordpress/ -R
-    - rsync -arvzc -e "ssh -o StrictHostKeyChecking=no" ./* user@app.ovirt.ru:/var/www/wordpress/
-    - ssh -o StrictHostKeyChecking=no user@app.ovirt.ru sudo chown www-data /var/www/wordpress/ -R 
+    - ssh -o StrictHostKeyChecking=no user@app.ru-devops.ru sudo chown user /var/www/wordpress/ -R
+    - rsync -arvzc -e "ssh -o StrictHostKeyChecking=no" ./* user@app.ru-devops.ru:/var/www/wordpress/
+    - ssh -o StrictHostKeyChecking=no user@app.ru-devops.ru sudo chown www-data /var/www/wordpress/ -R 
 ```
 
-![29](img/img029.PNG)
+![26](./screenshot/26.png)
 
-![29](img/img030.PNG)
+![27](./screenshot/27.png)
 
 Который:
 - добавляет закрытый ключ `ssh` из переменной `ssh_key` на `runner`а
