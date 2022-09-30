@@ -1701,14 +1701,17 @@ relay-log-info-file = relay-log.info
 relay-log-index = relay-log.index
 replicate-do-db = {{ db_name }}
 ```
-Используемые материалы:
+Выполняем установку модуля mysql:
+```
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-galaxy collection install community.mysql
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Downloading https://galaxy.ansible.com/download/community-mysql-3.5.1.tar.gz to /home/iurii-devops/.ansible/tmp/ansible-local-39610bvynsu7r/tmpfjgqutkb/community-mysql-3.5.1-xz90scjl
+Installing 'community.mysql:3.5.1' to '/home/iurii-devops/.ansible/collections/ansible_collections/community/mysql'
+community.mysql:3.5.1 was installed successfully
 
-[https://medium.com/@kelom.x/ansible-mysql-installation-2513d0f70faf](https://medium.com/@kelom.x/ansible-mysql-installation-2513d0f70faf)
-
-[https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/replication.yml](https://github.com/geerlingguy/ansible-role-mysql/blob/master/tasks/replication.yml)
-
-[https://handyhost.ru/manuals/mysql/mysql-replication.html](https://handyhost.ru/manuals/mysql/mysql-replication.html)
-
+```
 Для создания кластера выполняем `ansible-playbook mysql.yml -i hosts`
 
 <details>
@@ -1716,89 +1719,87 @@ replicate-do-db = {{ db_name }}
 
 ```bash
 
-user@user-ubuntu:~/devops/diplom/ansible$ ansible-playbook mysql.yml -i hosts
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook mysql.yml -i hosts
 
-PLAY [db01 db02] ****************************************************************************************************************************************************************
+PLAY [db01 db02] ******************************************************************************************************************************************************
 
-TASK [Gathering Facts] **********************************************************************************************************************************************************
-ok: [db02.ovirt.ru]
-ok: [db01.ovirt.ru]
+TASK [Gathering Facts] ************************************************************************************************************************************************
+ok: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Installing Mysql and dependencies] ********************************************************************************************************************************
-changed: [db01.ovirt.ru] => (item=mysql-server)
-changed: [db02.ovirt.ru] => (item=mysql-server)
-changed: [db01.ovirt.ru] => (item=mysql-client)
-changed: [db02.ovirt.ru] => (item=mysql-client)
-changed: [db01.ovirt.ru] => (item=python3-mysqldb)
-changed: [db02.ovirt.ru] => (item=python3-mysqldb)
-changed: [db01.ovirt.ru] => (item=libmysqlclient-dev)
-changed: [db02.ovirt.ru] => (item=libmysqlclient-dev)
+TASK [mysql : Installing Mysql and dependencies] **********************************************************************************************************************
+ok: [db01.ru-devops.ru] => (item=mysql-server)
+ok: [db02.ru-devops.ru] => (item=mysql-server)
+ok: [db01.ru-devops.ru] => (item=mysql-client)
+ok: [db02.ru-devops.ru] => (item=mysql-client)
+ok: [db01.ru-devops.ru] => (item=python3-mysqldb)
+ok: [db02.ru-devops.ru] => (item=python3-mysqldb)
+ok: [db01.ru-devops.ru] => (item=libmysqlclient-dev)
+ok: [db02.ru-devops.ru] => (item=libmysqlclient-dev)
 
-TASK [mysql : start and enable mysql service] ***********************************************************************************************************************************
-ok: [db02.ovirt.ru]
-ok: [db01.ovirt.ru]
+TASK [mysql : start and enable mysql service] *************************************************************************************************************************
+ok: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Creating database wordpress] **************************************************************************************************************************************
-changed: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
+TASK [mysql : Creating database wordpress] ****************************************************************************************************************************
+ok: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Creating mysql user wordpress] ************************************************************************************************************************************
-changed: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
+TASK [mysql : Creating mysql user wordpress] **************************************************************************************************************************
+ok: [db02.ru-devops.ru]
+ok: [db01.ru-devops.ru]
 
-TASK [mysql : Enable remote login to mysql] *************************************************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [db01.ovirt.ru]
+TASK [mysql : Enable remote login to mysql] ***************************************************************************************************************************
+ok: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Remove anonymous MySQL users.] ************************************************************************************************************************************
-ok: [db01.ovirt.ru]
-ok: [db02.ovirt.ru]
+TASK [mysql : Remove anonymous MySQL users.] **************************************************************************************************************************
+ok: [db02.ru-devops.ru]
+ok: [db01.ru-devops.ru]
 
-TASK [mysql : Remove MySQL test database.] **************************************************************************************************************************************
-ok: [db01.ovirt.ru]
-ok: [db02.ovirt.ru]
+TASK [mysql : Remove MySQL test database.] ****************************************************************************************************************************
+ok: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Copy master.cnf] **************************************************************************************************************************************************
-skipping: [db02.ovirt.ru]
-changed: [db01.ovirt.ru]
+TASK [mysql : Copy master.cnf] ****************************************************************************************************************************************
+skipping: [db02.ru-devops.ru]
+ok: [db01.ru-devops.ru]
 
-TASK [mysql : Copy slave.cnf] ***************************************************************************************************************************************************
-skipping: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
+TASK [mysql : Copy slave.cnf] *****************************************************************************************************************************************
+skipping: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Ensure replication user exists on master.] ************************************************************************************************************************
-skipping: [db02.ovirt.ru]
-changed: [db01.ovirt.ru]
+TASK [mysql : Ensure replication user exists on master.] **************************************************************************************************************
+skipping: [db02.ru-devops.ru]
+ok: [db01.ru-devops.ru]
 
-TASK [mysql : check slave replication status] ***********************************************************************************************************************************
-skipping: [db01.ovirt.ru]
-ok: [db02.ovirt.ru]
+TASK [mysql : check slave replication status] *************************************************************************************************************************
+skipping: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru]
 
-TASK [mysql : Check master replication status] **********************************************************************************************************************************
-skipping: [db01.ovirt.ru]
-ok: [db02.ovirt.ru -> db01.ovirt.ru(192.168.102.34)]
+TASK [mysql : Check master replication status] ************************************************************************************************************************
+skipping: [db01.ru-devops.ru]
+ok: [db02.ru-devops.ru -> db01.ru-devops.ru(192.168.102.23)]
 
-TASK [mysql : configure replication on the slave] *******************************************************************************************************************************
-skipping: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
+TASK [mysql : configure replication on the slave] *********************************************************************************************************************
+skipping: [db01.ru-devops.ru]
+changed: [db02.ru-devops.ru]
 
-TASK [mysql : start replication] ************************************************************************************************************************************************
-skipping: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
+TASK [mysql : start replication] **************************************************************************************************************************************
+skipping: [db01.ru-devops.ru]
+changed: [db02.ru-devops.ru]
 
-RUNNING HANDLER [mysql : Restart mysql] *****************************************************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [db01.ovirt.ru]
-
-PLAY RECAP **********************************************************************************************************************************************************************
-db01.ovirt.ru              : ok=11   changed=7    unreachable=0    failed=0    skipped=5    rescued=0    ignored=0   
-db02.ovirt.ru              : ok=14   changed=8    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
+PLAY RECAP ************************************************************************************************************************************************************
+db01.ru-devops.ru          : ok=10   changed=0    unreachable=0    failed=0    skipped=5    rescued=0    ignored=0   
+db02.ru-devops.ru          : ok=13   changed=2    unreachable=0    failed=0    skipped=2    rescued=0    ignored=0   
 
 ```
 
 </details>
 
 ---
+
+![14](./screenshot/14.png)
 
 ___
 ### Установка WordPress
@@ -1826,10 +1827,8 @@ ___
 
 ---
 
-Далее ставим `Wordpress`, в качестве вебсервера возьмем `nginx` и `php8.1`.
-
+Далее ставим `Wordpress`. Воспользуемся ролью из ansible-galaxy.
 Так же выполним предварительные настройки `Wordpress`, шаблонизировав `wp-config.php.j2`.
-
 А именно внесем туда:
 
 ```bash
@@ -1840,96 +1839,95 @@ define( 'DB_HOST', '{{ db_host }}' );
 ```
 Выполняем `ansible-playbook app.yml -i hosts`
 
-После выполнения плейбука остается ввести данные пользователя:
-
-Используемая документация:
-
-[https://habr.com/ru/post/223073/](https://habr.com/ru/post/223073/)
-
-[https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-wordpress-with-lamp-on-ubuntu-18-04-ru](https://www.digitalocean.com/community/tutorials/how-to-use-ansible-to-install-and-set-up-wordpress-with-lamp-on-ubuntu-18-04-ru)
-
-[https://www.techbeginner.in/2021/01/how-to-install-php-using-ansible.html](https://www.techbeginner.in/2021/01/how-to-install-php-using-ansible.html)
-
 <details>
 <summary>Вывод Ansible</summary>
 
 ```bash
 
-user@user-ubuntu:~/devops/diplom/ansible$ ansible-playbook app.yml -i hosts
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook app.yml -i hosts
 
-PLAY [app] **********************************************************************************************************************************************************************
+PLAY [app] ********************************************************************************************************************************************************************************************************************
 
-TASK [Gathering Facts] **********************************************************************************************************************************************************
-ok: [app.ovirt.ru]
+TASK [Gathering Facts] ********************************************************************************************************************************************************************************************************
+ok: [app.ru-devops.ru]
 
-TASK [app : Install Nginx] ******************************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : Install Nginx] ****************************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : Disable default site] ***********************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : Disable default site] *********************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : Remove default site] ************************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : Remove default site] **********************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : install php] ********************************************************************************************************************************************************
-changed: [app.ovirt.ru] => (item=php8.1)
-changed: [app.ovirt.ru] => (item=php8.1-cgi)
-changed: [app.ovirt.ru] => (item=php8.1-fpm)
-changed: [app.ovirt.ru] => (item=php8.1-memcache)
-changed: [app.ovirt.ru] => (item=php8.1-memcached)
-changed: [app.ovirt.ru] => (item=php8.1-mysql)
-changed: [app.ovirt.ru] => (item=php8.1-gd)
-changed: [app.ovirt.ru] => (item=php8.1-curl)
-changed: [app.ovirt.ru] => (item=php8.1-xmlrpc)
+TASK [app : install php] ******************************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru] => (item=php8.1)
+changed: [app.ru-devops.ru] => (item=php8.1-cgi)
+changed: [app.ru-devops.ru] => (item=php8.1-fpm)
+changed: [app.ru-devops.ru] => (item=php8.1-memcache)
+changed: [app.ru-devops.ru] => (item=php8.1-memcached)
+changed: [app.ru-devops.ru] => (item=php8.1-mysql)
+changed: [app.ru-devops.ru] => (item=php8.1-gd)
+changed: [app.ru-devops.ru] => (item=php8.1-curl)
+changed: [app.ru-devops.ru] => (item=php8.1-xmlrpc)
 
-TASK [app : Uninstall Apache2] **************************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : Uninstall Apache2] ************************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : change listen socket] ***********************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : change listen socket] *********************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : install nginx configuration] ****************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : install nginx configuration] **************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : activate site configuration] ****************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : activate site configuration] **************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : download WordPress] *************************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : download WordPress] ***********************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : creating directory for WordPress] ***********************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : creating directory for WordPress] *********************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : unpack WordPress installation] **************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : unpack WordPress installation] ************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-TASK [app : Set up wp-config] ***************************************************************************************************************************************************
-changed: [app.ovirt.ru]
+TASK [app : Set up wp-config] *************************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-RUNNING HANDLER [app : nginx systemd] *******************************************************************************************************************************************
-ok: [app.ovirt.ru]
+RUNNING HANDLER [app : nginx systemd] *****************************************************************************************************************************************************************************************
+ok: [app.ru-devops.ru]
 
-RUNNING HANDLER [app : restart php-fpm] *****************************************************************************************************************************************
-changed: [app.ovirt.ru]
+RUNNING HANDLER [app : nginx restart] *****************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
 
-PLAY RECAP **********************************************************************************************************************************************************************
-app.ovirt.ru               : ok=12   changed=13   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0 
+RUNNING HANDLER [app : restart php-fpm] ***************************************************************************************************************************************************************************************
+changed: [app.ru-devops.ru]
+
+PLAY RECAP ********************************************************************************************************************************************************************************************************************
+app.ru-devops.ru           : ok=16   changed=14   unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ 
 
 ```
 
 </details>
 
-![17](img/img017.PNG)
+Теперь внесём данные на сайте ru-devops.ru.
 
-![18](img/img018.PNG)
+И выполним проверку изменений перейдя на сайт www.ru-devops.ru:
 
-![19](img/img019.PNG)
+![15](./screenshot/15.png)
 
-![20](img/img020.PNG)
+![16](./screenshot/16.png)
 
-![21](img/img021.PNG)
+![17](./screenshot/17.png)
 
-![22](img/img022.PNG)
+![18](./screenshot/18.png)
+
+![19](./screenshot/19.png)
+
+![20](./screenshot/20.png)
 ---
 
 ---
