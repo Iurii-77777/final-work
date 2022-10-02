@@ -2813,17 +2813,15 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 ![31](./screenshot/31.png)
 
-![32](./screenshot/32.png)
-
 Проверим `Pipelines`, видим что он выполнился
+
+![32](./screenshot/32.png)
 
 ![33](./screenshot/33.png)
 
-![34](./screenshot/34.png)
-
 И сам файл на мервере `wordpress`
 
-![35](./screenshot/35.png)
+![34](./screenshot/34.png)
 ---
 
 ___
