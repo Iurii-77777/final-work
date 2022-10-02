@@ -68,7 +68,8 @@ resource "yandex_dns_zone" "finalwork" {
   depends_on = [
     yandex_vpc_subnet.net-101,yandex_vpc_subnet.net-102
   ]
-}network
+}
+
 resource "yandex_dns_recordset" "def" {
   zone_id = yandex_dns_zone.finalwork.id
   name    = "@.ru-devops.ru."
