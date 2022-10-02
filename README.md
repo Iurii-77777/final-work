@@ -2129,7 +2129,7 @@ deploy-job:
 
 ![27](./screenshot/27.png)
 
-Который:
+Вышеуказанный код выполняет следущее:
 - добавляет закрытый ключ `ssh` из переменной `ssh_key` на `runner`а
 - Подключается по ssh к серверу с `wordpress`, меняет владельца всего содержимого каталога `/var/www/wordpress/` на `user`
 - Утилитой `rsync` синхронизирует файлы и папки.
@@ -2143,46 +2143,687 @@ deploy-job:
 # GitLab coordinator URL
 gitlab_runner_coordinator_url: 'http://gitlab.{{ domain_name }}'
 # GitLab registration token
-gitlab_runner_registration_token: 'GR1348941mRspncv4vqG9yCwuCTHv'
+gitlab_runner_registration_token: 'GR13489419xaozkLzQNuDyN22cnkv'
 ```
+Устанавливаем дополнительные модули для запуска роли:
+```
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-galaxy collection install community.windows
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Downloading https://galaxy.ansible.com/download/community-windows-1.11.0.tar.gz to /home/iurii-devops/.ansible/tmp/ansible-local-1475762yhvz87r/tmp7ji0y242/community-windows-1.11.0-4z65cyv6
+Installing 'community.windows:1.11.0' to '/home/iurii-devops/.ansible/collections/ansible_collections/community/windows'
+community.windows:1.11.0 was installed successfully
+'ansible.windows:1.11.1' is already installed, skipping.
 
-Выполняем `ansible-playbook runner.yml -i hosts`. Использовал готовую роль, чуть изменив, много лишних `Task`ов.
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-galaxy collection install ansible.windows
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Downloading https://galaxy.ansible.com/download/ansible-windows-1.11.1.tar.gz to /home/iurii-devops/.ansible/tmp/ansible-local-147539pva6569_/tmpakdkzkgw/ansible-windows-1.11.1-icjmi7v1
+Installing 'ansible.windows:1.11.1' to '/home/iurii-devops/.ansible/collections/ansible_collections/ansible/windows'
+ansible.windows:1.11.1 was installed successfully
+```
+ 
+Выполняем `ansible-playbook runner.yml -i hosts`. Использована готовая роль с ansible-galaxy, внесены необходимые доработки.
 
 <details>
 <summary>Вывод Ansible</summary>
 
 ```bash
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook runner.yml -i hosts
 
+PLAY [runner] *********************************************************************************************************************************************************
 
+TASK [Gathering Facts] ************************************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Load platform-specific variables] **********************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : (Container) Pull Image from Registry] ******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Container) Define Container volume Path] **************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Container) List configured runners] *******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Container) Check runner is registered] ****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : configured_runners?] ***********************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : verified_runners?] *************************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Container) Register GitLab Runner] ********************************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []}) 
+
+TASK [runner : Create .gitlab-runner dir] *****************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Ensure config.toml exists] *****************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Set concurrent option] *********************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add listen_address to config] **************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add log_format to config] ******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add sentry dsn to config] ******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add session server listen_address to config] ***********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add session server advertise_address to config] ********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add session server session_timeout to config] **********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Get existing config.toml] ******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Get pre-existing runner configs] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Create temporary directory] ****************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Write config section for each runner] ******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Assemble new config.toml] ******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Container) Start the container] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Get Gitlab repository installation script] ****************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Install Gitlab repository] ********************************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Update gitlab_runner_package_name] ************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Set gitlab_runner_package_name] ***************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Install GitLab Runner] ************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Install GitLab Runner] ************************************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : (Debian) Remove ~/gitlab-runner/.bash_logout on debian buster and ubuntu focal] ************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Ensure /etc/systemd/system/gitlab-runner.service.d/ exists] ********************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : Add reload command to GitLab Runner system service] ****************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : Configure graceful stop for GitLab Runner system service] **********************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : Force systemd to reread configs] ***********************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : (RedHat) Get Gitlab repository installation script] ****************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (RedHat) Install Gitlab repository] ********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (RedHat) Update gitlab_runner_package_name] ************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (RedHat) Set gitlab_runner_package_name] ***************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (RedHat) Install GitLab Runner] ************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Ensure /etc/systemd/system/gitlab-runner.service.d/ exists] ********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add reload command to GitLab Runner system service] ****************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Configure graceful stop for GitLab Runner system service] **********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Force systemd to reread configs] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Check gitlab-runner executable exists] *********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Set fact -> gitlab_runner_exists] **************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Get existing version] **************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Set fact -> gitlab_runner_existing_version] ****************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Precreate gitlab-runner log directory] *********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Download GitLab Runner] ************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Setting Permissions for gitlab-runner executable] **********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Install GitLab Runner] *************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Start GitLab Runner] ***************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Stop GitLab Runner] ****************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Download GitLab Runner] ************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Setting Permissions for gitlab-runner executable] **********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (MacOS) Start GitLab Runner] ***************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Arch) Set gitlab_runner_package_name] *****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Arch) Install GitLab Runner] **************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Ensure /etc/systemd/system/gitlab-runner.service.d/ exists] ********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add reload command to GitLab Runner system service] ****************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Configure graceful stop for GitLab Runner system service] **********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Force systemd to reread configs] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Unix) List configured runners] ************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : (Unix) Check runner is registered] *********************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : (Unix) Register GitLab Runner] *************************************************************************************************************************
+included: /home/iurii-devops/PycharmProjects/diplom/terraform.tfstate.d/ansible/roles/runner/tasks/register-runner.yml for runner.ru-devops.ru => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []})
+
+TASK [runner : remove config.toml file] *******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Create .gitlab-runner dir] *****************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Ensure config.toml exists] *****************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Construct the runner command without secrets] **********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Register runner to GitLab] *****************************************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : Create .gitlab-runner dir] *****************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Ensure config.toml exists] *****************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Set concurrent option] *********************************************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : Add listen_address to config] **************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add log_format to config] ******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add sentry dsn to config] ******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : Add session server listen_address to config] ***********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Add session server advertise_address to config] ********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Add session server session_timeout to config] **********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Get existing config.toml] ******************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Get pre-existing runner configs] ***********************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Create temporary directory] ****************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : Write config section for each runner] ******************************************************************************************************************
+included: /home/iurii-devops/PycharmProjects/diplom/terraform.tfstate.d/ansible/roles/runner/tasks/config-runner.yml for runner.ru-devops.ru => (item=concurrent = 4
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+)
+included: /home/iurii-devops/PycharmProjects/diplom/terraform.tfstate.d/ansible/roles/runner/tasks/config-runner.yml for runner.ru-devops.ru => (item=  name = "runner"
+  output_limit = 4096
+  url = "http://gitlab.ru-devops.ru"
+  id = 1
+  token = "Nncxs2ofjxn7UBan71se"
+  token_obtained_at = 2022-10-02T08:51:34Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "shell"
+  [runners.custom_build_dir]
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+)
+
+TASK [runner : conf[1/2]: Create temporary file] **********************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[1/2]: Isolate runner configuration] ***************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : include_tasks] *****************************************************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []}) 
+
+TASK [runner : conf[1/2]: Remove runner config] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []}) 
+
+TASK [runner : conf[2/2]: Create temporary file] **********************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: Isolate runner configuration] ***************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : include_tasks] *****************************************************************************************************************************************
+included: /home/iurii-devops/PycharmProjects/diplom/terraform.tfstate.d/ansible/roles/runner/tasks/update-config-runner.yml for runner.ru-devops.ru => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []})
+
+TASK [runner : conf[2/2]: runner[1/1]: Set concurrent limit option] ***************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set coordinator URL] ***********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set clone URL] *****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set environment option] ********************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set pre_clone_script] **********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set pre_build_script] **********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set tls_ca_file] ***************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set post_build_script] *********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set runner executor option] ****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set runner shell option] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set runner executor section] ***************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set output_limit option] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set runner docker image option] ************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker helper image option] ************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker privileged option] **************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker wait_for_services_timeout option] ***********************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker tlsverify option] ***************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker shm_size option] ****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker disable_cache option] ***********************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker DNS option] *********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker DNS search option] **************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker pull_policy option] *************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker volumes option] *****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker devices option] *****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set runner docker network option] **********************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set custom_build_dir section] **************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set docker custom_build_dir-enabled option] ************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache section] *************************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 section] **********************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache gcs section] *********************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache azure section] *******************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache type option] *********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache path option] *********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache shared option] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 server addresss] **************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 access key] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 secret key] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 bucket name option] ***********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 bucket location option] *******************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache s3 insecure option] **************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache gcs bucket name] *****************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache gcs credentials file] ************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache gcs access id] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache gcs private key] *****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache azure account name] **************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache azure account key] ***************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache azure container name] ************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache azure storage domain] ************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set ssh user option] ***********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set ssh host option] ***********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set ssh port option] ***********************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set ssh password option] *******************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set ssh identity file option] **************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set virtualbox base name option] ***********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set virtualbox base snapshot option] *******************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set virtualbox base folder option] *********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set virtualbox disable snapshots option] ***************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set builds dir file option] ****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Set cache dir file option] *****************************************************************************************************
+ok: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: runner[1/1]: Ensure directory permissions] **************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item=) 
+skipping: [runner.ru-devops.ru] => (item=) 
+
+TASK [runner : conf[2/2]: runner[1/1]: Ensure directory access test] **************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item=) 
+skipping: [runner.ru-devops.ru] => (item=) 
+
+TASK [runner : conf[2/2]: runner[1/1]: Ensure directory access fail on error] *****************************************************************************************
+skipping: [runner.ru-devops.ru] => (item={'changed': False, 'skipped': True, 'skip_reason': 'Conditional result was False', 'item': '', 'ansible_loop_var': 'item'}) 
+skipping: [runner.ru-devops.ru] => (item={'changed': False, 'skipped': True, 'skip_reason': 'Conditional result was False', 'item': '', 'ansible_loop_var': 'item'}) 
+
+TASK [runner : include_tasks] *****************************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : conf[2/2]: Remove runner config] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []}) 
+
+TASK [runner : Assemble new config.toml] ******************************************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Check gitlab-runner executable exists] *******************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Set fact -> gitlab_runner_exists] ************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Get existing version] ************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Set fact -> gitlab_runner_existing_version] **************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Ensure install directory exists] *************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Download GitLab Runner] **********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Install GitLab Runner] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Install GitLab Runner] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Make sure runner is stopped] *****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Download GitLab Runner] **********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) List configured runners] *********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Check runner is registered] ******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Register GitLab Runner] **********************************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item={'name': 'runner', 'state': 'present', 'executor': 'shell', 'output_limit': 4096, 'concurrent_specific': '0', 'docker_image': '', 'tags': [], 'run_untagged': True, 'protected': False, 'docker_privileged': False, 'locked': 'false', 'docker_network_mode': 'bridge', 'env_vars': []}) 
+
+TASK [runner : (Windows) Create .gitlab-runner dir] *******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Ensure config.toml exists] *******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Set concurrent option] ***********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Add listen_address to config] ****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Add sentry dsn to config] ********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Add session server listen_address to config] *************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Add session server advertise_address to config] **********************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Add session server session_timeout to config] ************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Get existing config.toml] ********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Get pre-existing global config] **************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Get pre-existing runner configs] *************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Create temporary directory] ******************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Write config section for each runner] ********************************************************************************************************
+skipping: [runner.ru-devops.ru] => (item=concurrent = 4
+check_interval = 0
+
+[session_server]
+  session_timeout = 1800
+
+) 
+skipping: [runner.ru-devops.ru] => (item=  name = "runner"
+  output_limit = 4096
+  url = "http://gitlab.ru-devops.ru"
+  id = 1
+  token = "Nncxs2ofjxn7UBan71se"
+  token_obtained_at = 2022-10-02T08:51:34Z
+  token_expires_at = 0001-01-01T00:00:00Z
+  executor = "shell"
+  [runners.custom_build_dir]
+  [runners.cache]
+    [runners.cache.s3]
+    [runners.cache.gcs]
+    [runners.cache.azure]
+) 
+
+TASK [runner : (Windows) Create temporary file config.toml] ***********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Write global config to file] *****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Create temporary file runners-config.toml] ***************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Assemble runners files in config dir] ********************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Assemble new config.toml] ********************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Verify config] *******************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+TASK [runner : (Windows) Start GitLab Runner] *************************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+RUNNING HANDLER [runner : restart_gitlab_runner] **********************************************************************************************************************
+changed: [runner.ru-devops.ru]
+
+RUNNING HANDLER [runner : restart_gitlab_runner_macos] ****************************************************************************************************************
+skipping: [runner.ru-devops.ru]
+
+PLAY RECAP ************************************************************************************************************************************************************
+runner.ru-devops.ru        : ok=81   changed=19   unreachable=0    failed=0    skipped=111  rescued=0    ignored=0   
+
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ 
 ```
 
 </details>
 
 Проверяем что `runner` подключился к `gitlab`, смотрим `Settings` -> `CI/CD` -> `Runners`
 
-![31](img/img031.PNG)
+![28](./screenshot/28.png)
 
 В `CI/CD` -> `Pipelines` видим что `pipeline` выполнился.
 
-![32](img/img032.PNG)
+![29](./screenshot/29.png)
 
-![33](img/img033.PNG)
+![30](./screenshot/30.png)
+ 
+Теперь сделаем коммит в репозиторий и еще раз глянем на `Pipelines`
 
-Теперь сделаем коммит (добавим файл `hello.txt`) в репозиторий и еще раз глянем на `Pipelines`
+![31](./screenshot/31.png)
 
-![34](img/img034.PNG)
-
-![35](img/img035.PNG)
+![32](./screenshot/32.png)
 
 Проверим `Pipelines`, видим что он выполнился
 
-![36](img/img036.PNG)
+![33](./screenshot/33.png)
 
-![37](img/img037.PNG)
+![34](./screenshot/34.png)
 
 И сам файл на мервере `wordpress`
 
-![38](img/img038.PNG)
+![35](./screenshot/35.png)
 ---
 
 ___
