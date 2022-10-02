@@ -3218,37 +3218,37 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 `Alertmanager`, доступен по адресу `https://alertmanager.ru-devops.ru/`
 
-![37](./screenshot/37.PNG)
+![37](./screenshot/37.png)
  
 `Grafana`, доступен по адресу `https://grafana.ru-devops.ru/`
 
-![38](./screenshot/38.PNG)
+![38](./screenshot/38.png)
 
 Дашборды
 
-![39](./screenshot/39.PNG)
+![39](./screenshot/39.png)
 
 Дашборд отображающий метрики из Node Exporter по всем серверам
 
-![40](./screenshot/40.PNG)
+![40](./screenshot/40.png)
 
 Для проверки `Alertmanager`, погасим один из серверов, например `db02`
 
-![41](./screenshot/41.PNG)
+![41](./screenshot/41.png)
 
 Проверим `Prometheus`
 
-![42](./screenshot/42.PNG)
+![42](./screenshot/42.png)
  
-![43](./screenshot/43.PNG)
+![43](./screenshot/43.png)
 
 Проверим `Alertmanager`
 
-![44](./screenshot/44.PNG)
+![44](./screenshot/44.png)
 
 И `Grafana`
 
-![45](./screenshot/45.PNG)
+![45](./screenshot/45.png)
 
 Видим что неисправность сервера была обнаружена на всех уровнях мониторинга.
 
@@ -3277,24 +3277,24 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 Работа по `https`. Информация по сертификату.
 
-![46](./screenshot/46.PNG)
+![46](./screenshot/46.png)
 
 `https://www.ru-devops.ru` (WordPress)
 
-![47](./screenshot/47.PNG)
+![47](./screenshot/47.png)
 
 `https://gitlab.ru-devops.ru` (Gitlab)
 
-![48](./screenshot/48.PNG)
+![48](./screenshot/48.png)
 
 `https://prometheus.ru-devops.ru` (Prometheus)
 
-![49](./screenshot/49.PNG)
+![49](./screenshot/49.png)
 
 `https://grafana.ru-devops.ru` (Grafana)
 
-![50](./screenshot/50.PNG)
+![50](./screenshot/50.png)
 
 `https://alertmanager.ru-devops.ru` (Alert Manager)
 
-![51](./screenshot/51.PNG)
+![51](./screenshot/51.png)
