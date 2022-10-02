@@ -2820,7 +2820,7 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 ![33](./screenshot/33.png)
 
-И сам файл на мервере `wordpress`
+Файл теперь можно открыть через браузер, на сервере `wordpress`:
 
 ![34](./screenshot/34.png)
 ---
