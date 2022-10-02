@@ -1,0 +1,42 @@
+[proxy]
+ru-devops.ru letsencrypt_email=steamdrago777@gmail.com domain_name=ru-devops.ru
+[proxy:vars]
+ansible_host=62.84.119.22
+ansible_ssh_common_args='-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null'
+
+[db01]
+db01.ru-devops.ru mysql_server_id=1 mysql_replication_role=master
+[db01:vars]
+ansible_host=192.168.102.23
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
+[db02]
+db02.ru-devops.ru mysql_server_id=2 mysql_replication_role=slave
+[db02:vars]
+ansible_host=192.168.102.31
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
+[app]
+app.ru-devops.ru
+[app:vars]
+ansible_host=192.168.102.26
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+#ssh 51.250.15.168 -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W app.ovirt:22 -q user@ru-devops.ru -o StrictHostKeyChecking=no "
+
+[gitlab]
+gitlab.ru-devops.ru domain_name=ru-devops.ru
+[gitlab:vars]
+ansible_host=192.168.102.14
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
+[runner]
+runner.ru-devops.ru domain_name=ru-devops.ru
+[runner:vars]
+ansible_host=192.168.102.16
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'
+
+[monitoring]
+monitoring.ru-devops.ru domain_name=ru-devops.ru
+[monitoring:vars]
+ansible_host=192.168.102.18
+ansible_ssh_common_args='-o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -o ProxyCommand="ssh -W %h:%p -q user@ru-devops.ru -o StrictHostKeyChecking=no "'

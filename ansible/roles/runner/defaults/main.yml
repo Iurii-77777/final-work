@@ -1,0 +1,107 @@
+---
+# for versions >= 10.x
+gitlab_runner_package_name: 'gitlab-runner'
+
+gitlab_runner_system_mode: yes
+
+# gitlab_runner_package_version for version pinning on debian/redhat
+# The following are for version pinning on MacOSX
+gitlab_runner_wanted_version: latest
+
+# This variable should not be modified usually as it depends on the gitlab_runner_wanted_version variable
+gitlab_runner_wanted_tag: "{{ 'latest' if gitlab_runner_wanted_version == 'latest' else ('v' + gitlab_runner_wanted_version) }}"
+
+# Overridden based on platform
+gitlab_runner_config_file: "{{ __gitlab_runner_config_file_system_mode if gitlab_runner_system_mode else __gitlab_runner_config_file_user_mode }}"
+gitlab_runner_config_file_location: "{{ gitlab_runner_config_file | dirname }}"
+gitlab_runner_executable: "{{ gitlab_runner_package_name }}"
+
+# Maximum number of global jobs to run concurrently
+gitlab_runner_concurrent: '{{ ansible_processor_vcpus }}'
+
+# GitLab coordinator URL
+gitlab_runner_coordinator_url: 'http://gitlab.{{ domain_name }}'
+# GitLab registration token
+gitlab_runner_registration_token: 'GR13489419xaozkLzQNuDyN22cnkv'
+
+gitlab_runner_sentry_dsn: ''
+
+# Prometheus Metrics & Monitoring
+gitlab_runner_listen_address: ''
+
+# Session server configuration
+gitlab_runner_session_server_listen_address: ''
+gitlab_runner_session_server_advertise_address: ''
+gitlab_runner_session_server_session_timeout: 1800
+
+# Skip the APT or YUM repository installation
+# You should provide a repository containing the needed packages before running this role.
+# Use this if you use a mirror repository
+# gitlab_runner_skip_package_repo_install: true
+
+# The credentials for the Windows user used to run the gitlab-runner service.
+# Those credentials will be passed to `gitlab-runner.exe install`.
+# https://docs.gitlab.com/runner/install/windows.html
+gitlab_runner_windows_service_user: ''
+gitlab_runner_windows_service_password: ''
+
+# Whether to try to start the runner on MacOS.
+# If set to `false`, it should be started manually.
+# https://docs.gitlab.com/runner/install/osx.html#limitations-on-macos
+gitlab_runner_macos_start_runner: true
+
+# default values for gitlab in container
+gitlab_runner_container_install: false
+gitlab_runner_container_image: gitlab/gitlab-runner
+gitlab_runner_container_tag: latest
+gitlab_runner_container_name: gitlab-runner
+gitlab_runner_container_mount_path: ''
+gitlab_runner_container_restart_policy: unless-stopped
+# you can define a network which the container connects to
+# this option uses network_mode, thus 'default' will use the first network found in docker network list
+gitlab_runner_container_network: default
+
+# default state to restart
+gitlab_runner_restart_state: restarted
+
+# default value for log_format
+# gitlab_runner_log_format: runner
+
+# controls diffs for assemle config file
+gitlab_runner_show_config_diff: no
+
+# A list of runners to register and configure
+gitlab_runner_runners:
+    # The identifier of the runner.
+  - name: '{{ ansible_hostname }}'
+    # set to 'absent' if you want to delete the runner. Defaults to 'present'.
+    state: present
+    # The executor used by the runner.
+    executor: 'shell'
+    # Set maximum build log size in kilobytes.
+    output_limit: 4096
+    # Maximum number of jobs to run concurrently on this specific runner.
+    # Defaults to 0, simply means don't limit.
+    concurrent_specific: '0'
+    # The default Docker image to use. Required when executor is `docker`.
+    docker_image: ''
+    # Set to override the default helper image that is used.
+    # docker_helper_image: 'gitlab/gitlab-runner-helper-linux:latest'
+    #
+    # The tags assigned to the runner.
+    tags: []
+    # Indicates whether this runner can pick jobs without tags.
+    run_untagged: true
+    # Indicates whether this runner should only pick jobs from protected branches.
+    protected: false
+    # Docker privileged mode
+    docker_privileged: false
+    # Runner Locked. When a runner is locked, it cannot be assigned to other projects
+    locked: 'false'
+    # Add container to a custom network
+    docker_network_mode: bridge
+    # Custom CA certificate file
+    # tls_ca_file: "/etc/ssl/private/Custom_Bundle-CA.pem"
+    #
+    # Custom environment variables injected to build environment
+    env_vars: []
