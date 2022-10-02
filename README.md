@@ -3210,47 +3210,47 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 Что мы получаем: 
 
-`Prometheus`, доступен по адресу `https://prometheus.ovirt.ru/`
+`Prometheus`, доступен по адресу `https://prometheus.ru-devops.ru/`
 
-![39](img/img039.PNG)
+![35](./screenshot/35.PNG)
 
-![40](img/img040.PNG)
+![36](./screenshot/36.PNG)
 
-`Alertmanager`, доступен по адресу `https://alertmanager.ovirt.ru/`
+`Alertmanager`, доступен по адресу `https://alertmanager.ru-devops.ru/`
 
-![41](img/img041.PNG)
+![37](./screenshot/37.PNG)
+ 
+`Grafana`, доступен по адресу `https://grafana.ru-devops.ru/`
 
-`Grafana`, доступен по адресу `https://grafana.ovirt.ru/`
-
-![42](img/img042.PNG)
+![38](./screenshot/38.PNG)
 
 Дашборды
 
-![43](img/img043.PNG)
+![39](./screenshot/39.PNG)
 
 Дашборд отображающий метрики из Node Exporter по всем серверам
 
-![44](img/img044.PNG)
+![40](./screenshot/40.PNG)
 
-Для проверки `Alertmanager`, погасим один из серверов, допустим `runner`
+Для проверки `Alertmanager`, погасим один из серверов, например `db02`
 
-![45](img/img045.PNG)
+![41](./screenshot/41.PNG)
 
 Проверим `Prometheus`
 
-![46](img/img046.PNG)
-
-![47](img/img047.PNG)
+![42](./screenshot/42.PNG)
+ 
+![43](./screenshot/43.PNG)
 
 Проверим `Alertmanager`
 
-![48](img/img048.PNG)
+![44](./screenshot/44.PNG)
 
 И `Grafana`
 
-![49](img/img049.PNG)
+![45](./screenshot/45.PNG)
 
-Видим что везде тревога есть.
+Видим что неисправность сервера была обнаружена на всех уровнях мониторинга.
 
 ---
 
@@ -3271,53 +3271,30 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 Выполненная работа:
 
-Манифесты [Terraform](scripts/terraform)
+Манифесты [Terraform](/terraform)
 
-Роли [Ansible](scripts/ansible)
+Роли [Ansible](/ansible)
 
-Работа по `https`
+Работа по `https`. Информация по сертификату.
 
-![50](img/img050.PNG)
+![46](./screenshot/46.PNG)
 
-`https://www.ovirt.ru` (WordPress)
+`https://www.ru-devops.ru` (WordPress)
 
-![51](img/img051.PNG)
+![47](./screenshot/47.PNG)
 
-`https://gitlab.ovirt.ru` (Gitlab)
+`https://gitlab.ru-devops.ru` (Gitlab)
 
-![52](img/img052.PNG)
+![48](./screenshot/48.PNG)
 
-`https://grafana.ovirt.ru` (Grafana)
+`https://prometheus.ru-devops.ru` (Prometheus)
 
-![53](img/img053.PNG)
+![49](./screenshot/49.PNG)
 
-`https://prometheus.ovirt.ru` (Prometheus)
+`https://grafana.ru-devops.ru` (Grafana)
 
-![54](img/img054.PNG)
+![50](./screenshot/50.PNG)
 
-`https://alertmanager.ovirt.ru` (Alert Manager)
+`https://alertmanager.ru-devops.ru` (Alert Manager)
 
-![55](img/img055.PNG)
-
----
-
----
-## Как правильно задавать вопросы дипломному руководителю?
-
-**Что поможет решить большинство частых проблем:**
-
-1. Попробовать найти ответ сначала самостоятельно в интернете или в
-  материалах курса и ДЗ и только после этого спрашивать у дипломного
-  руководителя. Навык поиска ответов пригодится вам в профессиональной
-  деятельности.
-2. Если вопросов больше одного, то присылайте их в виде нумерованного
-  списка. Так дипломному руководителю будет проще отвечать на каждый из
-  них.
-3. При необходимости прикрепите к вопросу скриншоты и стрелочкой
-  покажите, где не получается.
-
-**Что может стать источником проблем:**
-
-1. Вопросы вида «Ничего не работает. Не запускается. Всё сломалось». Дипломный руководитель не сможет ответить на такой вопрос без дополнительных уточнений. Цените своё время и время других.
-2. Откладывание выполнения курсового проекта на последний момент.
-3. Ожидание моментального ответа на свой вопрос. Дипломные руководители работающие разработчики, которые занимаются, кроме преподавания, своими проектами. Их время ограничено, поэтому постарайтесь задавать правильные вопросы, чтобы получать быстрые ответы :)
+![51](./screenshot/51.PNG)
