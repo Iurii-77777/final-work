@@ -3212,9 +3212,9 @@ iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$
 
 `Prometheus`, доступен по адресу `https://prometheus.ru-devops.ru/`
 
-![35](./screenshot/35.PNG)
+![35](./screenshot/35.png)
 
-![36](./screenshot/36.PNG)
+![36](./screenshot/36.png)
 
 `Alertmanager`, доступен по адресу `https://alertmanager.ru-devops.ru/`
 
