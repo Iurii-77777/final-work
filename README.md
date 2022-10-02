@@ -2097,7 +2097,7 @@ To http://gitlab.ru-devops.ru/root/wordpress.git
 
 ![24](./screenshot/24.png)
 
-Так же в `Settings` -> `CI/CD` -> `Runners` убедимся, что сейчас `runner`ов нет.
+В настройках видим , что `runner`ов нет.
 
 ![25](./screenshot/25.png)
 
