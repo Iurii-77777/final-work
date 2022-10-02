@@ -1,0 +1,9 @@
+#cloud-config
+users:
+  - name: user
+    groups: sudo
+    shell: /bin/bash
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    ssh_authorized_keys:
+      - ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDSM9a3wkbMGu6jv1eV3kTe21hlnze4QzIe90Bl+c2uwR+/zh2Io9fbTBFB4JtmC1nTZe6gb1MYZXk2cUwz0vdkMTw8d1zR8iu/sdNLMoAsXlvpIJm9Vs+RNiCDItdgGFehoSrczRJdFYOmYzzMkIUN+ktE28chVAil7dvPqL2BS9Wk+nFH+lQVaSwk8OB6lT59ghDIm+evntea5eXqsrb+jc19wkNBofGEvxAV+FTIhFQKEEBdyQI9Imofw4vW/W7/C9kGyp+d5f8nFxxKI9ilfMgYJtXi/j2Q1xm+bjmJWZYeSl76pdUVq2MTu7/0Jad/9ixmZBrh+yu2VJ2ixb8erDlwa+OfX7SV1TD16TZFQwDY6mw6Y29Wlm4/R9wUVDZZDFjEjzCo8Rat9c2op5af0HZhDlZKC5NH8gV8i6gK+9FFYK60q8/OYTASHLXj+9f5pk0AYxL1wwl1BII7hMn/ZloOgQmP2bsx9XA54zE9oUTQQKTVuUJ2BWsOG0iTfMc= iurii-devops@Host-SPB
+
