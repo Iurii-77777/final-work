@@ -2856,13 +2856,7 @@ ___
 
 ---
 
-Литература:
-
-[https://medium.com/devops4me/install-grafana-prometheus-node-exporter-using-ansible-1771e649a4b3](https://medium.com/devops4me/install-grafana-prometheus-node-exporter-using-ansible-1771e649a4b3)
-
-[https://github.com/cloudalchemy/ansible-node-exporter](https://github.com/cloudalchemy/ansible-node-exporter)
-
-Для разворачивания `Node Exporter` выполняем `ansible-playbook node_exporter.yml -i hosts`
+Выполняем задание, для начала разворачиваем `Node Exporter`. Выполняем `ansible-playbook node_exporter.yml -i hosts`
 
 Разворачиваем везде, кроме сервера `gitlab`, т.к. там уже есть, он ставится вместе с `gitlab`ом.
 
@@ -2870,330 +2864,345 @@ ___
 <summary>Вывод Ansible</summary>
 
 ```bash
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook node_exporter.yml -i hosts
 
-user@user-ubuntu:~/devops/diplom/ansible$ ansible-playbook node_exporter.yml -i hosts
+PLAY [app db01 db02 monitoring runner proxy] **************************************************************************************************************************
 
-PLAY [app db01 db02 monitoring runner proxy] ************************************************************************************************************************************
+TASK [Gathering Facts] ************************************************************************************************************************************************
+ok: [runner.ru-devops.ru]
+ok: [db01.ru-devops.ru]
+ok: [app.ru-devops.ru]
+ok: [db02.ru-devops.ru]
+ok: [monitoring.ru-devops.ru]
+ok: [ru-devops.ru]
 
-TASK [Gathering Facts] **********************************************************************************************************************************************************
-ok: [db02.ovirt.ru]
-ok: [db01.ovirt.ru]
-ok: [app.ovirt.ru]
-ok: [runner.ovirt.ru]
-ok: [monitoring.ovirt.ru]
-ok: [ovirt.ru]
+TASK [node_exporter : check if node exporter exist] *******************************************************************************************************************
+ok: [db02.ru-devops.ru]
+ok: [monitoring.ru-devops.ru]
+ok: [app.ru-devops.ru]
+ok: [db01.ru-devops.ru]
+ok: [runner.ru-devops.ru]
+ok: [ru-devops.ru]
 
-TASK [node_exporter : check if node exporter exist] *****************************************************************************************************************************
-ok: [db02.ovirt.ru]
-ok: [monitoring.ovirt.ru]
-ok: [runner.ovirt.ru]
-ok: [app.ovirt.ru]
-ok: [db01.ovirt.ru]
-ok: [ovirt.ru]
+TASK [node_exporter : Create the node_exporter group] *****************************************************************************************************************
+changed: [db02.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [db01.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : Create the node_exporter group] ***************************************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [monitoring.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : Create the node_exporter user] ******************************************************************************************************************
+changed: [db02.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [db01.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : Create the node_exporter user] ****************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
-changed: [db02.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : Create node exporter config dir] ****************************************************************************************************************
+changed: [db02.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [db01.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : Create node exporter config dir] **************************************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [monitoring.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : if node exporter exist get version] *************************************************************************************************************
+skipping: [app.ru-devops.ru]
+skipping: [db01.ru-devops.ru]
+skipping: [db02.ru-devops.ru]
+skipping: [monitoring.ru-devops.ru]
+skipping: [runner.ru-devops.ru]
+skipping: [ru-devops.ru]
 
-TASK [node_exporter : if node exporter exist get version] ***********************************************************************************************************************
-skipping: [app.ovirt.ru]
-skipping: [db01.ovirt.ru]
-skipping: [db02.ovirt.ru]
-skipping: [monitoring.ovirt.ru]
-skipping: [runner.ovirt.ru]
-skipping: [ovirt.ru]
+TASK [node_exporter : download and unzip node exporter if not exist] **************************************************************************************************
+changed: [db01.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [db02.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : download and unzip node exporter if not exist] ************************************************************************************************************
-changed: [runner.ovirt.ru]
-changed: [monitoring.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : move the binary to the final destination] *******************************************************************************************************
+changed: [db02.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [db01.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : move the binary to the final destination] *****************************************************************************************************************
-changed: [monitoring.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [db02.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : clean] ******************************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
+changed: [db01.ru-devops.ru]
+changed: [db02.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : clean] ****************************************************************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [monitoring.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : install service] ********************************************************************************************************************************
+changed: [db01.ru-devops.ru]
+changed: [db02.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [ru-devops.ru]
 
-TASK [node_exporter : install service] ******************************************************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [monitoring.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : meta] *******************************************************************************************************************************************
 
-TASK [node_exporter : meta] *****************************************************************************************************************************************************
+RUNNING HANDLER [node_exporter : reload_daemon_and_restart_node_exporter] *********************************************************************************************
+changed: [db02.ru-devops.ru]
+changed: [monitoring.ru-devops.ru]
+changed: [runner.ru-devops.ru]
+changed: [app.ru-devops.ru]
+changed: [db01.ru-devops.ru]
+changed: [ru-devops.ru]
 
-RUNNING HANDLER [node_exporter : reload_daemon_and_restart_node_exporter] *******************************************************************************************************
-changed: [db02.ovirt.ru]
-changed: [monitoring.ovirt.ru]
-changed: [db01.ovirt.ru]
-changed: [runner.ovirt.ru]
-changed: [app.ovirt.ru]
-changed: [ovirt.ru]
+TASK [node_exporter : service always started] *************************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
+ok: [db02.ru-devops.ru]
+ok: [app.ru-devops.ru]
+ok: [runner.ru-devops.ru]
+ok: [db01.ru-devops.ru]
+ok: [ru-devops.ru]
 
-TASK [node_exporter : service always started] ***********************************************************************************************************************************
-ok: [db02.ovirt.ru]
-ok: [app.ovirt.ru]
-ok: [db01.ovirt.ru]
-ok: [monitoring.ovirt.ru]
-ok: [runner.ovirt.ru]
-ok: [ovirt.ru]
+PLAY RECAP ************************************************************************************************************************************************************
+app.ru-devops.ru           : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+db01.ru-devops.ru          : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+db02.ru-devops.ru          : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+monitoring.ru-devops.ru    : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+ru-devops.ru               : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
+runner.ru-devops.ru        : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
 
-PLAY RECAP **********************************************************************************************************************************************************************
-app.ovirt.ru               : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
-db01.ovirt.ru              : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
-db02.ovirt.ru              : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
-monitoring.ovirt.ru        : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
-ovirt.ru                   : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0   
-runner.ovirt.ru            : ok=11   changed=8    unreachable=0    failed=0    skipped=1    rescued=0    ignored=0 
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ 
+
 ```
 
 </details>
+ 
+Доустанавливаем модуль, для корректной работы роли ansible: 
+```
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-galaxy collection install ansible.posix
+Starting galaxy collection install process
+Process install dependency map
+Starting collection install process
+Downloading https://galaxy.ansible.com/download/ansible-posix-1.4.0.tar.gz to /home/iurii-devops/.ansible/tmp/ansible-local-150187_5e193_u/tmp8nrvtq4_/ansible-posix-1.4.0-ccr324bx
+Installing 'ansible.posix:1.4.0' to '/home/iurii-devops/.ansible/collections/ansible_collections/ansible/posix'
+ansible.posix:1.4.0 was installed successfully
+```
 
 Для разворачивания `Alertmanager`, `Prometheus` и `Grafana` выполняем `ansible-playbook monitoring.yml -i hosts`
+
 
 Ставится `Prometheus` и подключаются метрики, шаблон `prometheus.yml.j2`
 
 Ставится `Alertmanager` и подключаются правила алертов, шаблон `rules.yml.j2`
 
 Ставится `Grafana` и добавляются дашборды, описаны в  `defaults\main.yml`
+ 
 
 <details>
 <summary>Вывод Ansible</summary>
 
 ```bash
 
-user@user-ubuntu:~/devops/diplom/ansible$ ansible-playbook monitoring.yml -i hosts
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ ansible-playbook monitoring.yml -i hosts
 
-PLAY [monitoring] ***************************************************************************************************************************************************************
+PLAY [monitoring] *****************************************************************************************************************************************************
 
-TASK [Gathering Facts] **********************************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [Gathering Facts] ************************************************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [monitoring : install python-firewall] *************************************************************************************************************************************
-skipping: [monitoring.ovirt.ru] => (item=python-firewall) 
+TASK [monitoring : install python-firewall] ***************************************************************************************************************************
+skipping: [monitoring.ru-devops.ru] => (item=python-firewall) 
 
-TASK [monitoring : Allow Ports] *************************************************************************************************************************************************
-skipping: [monitoring.ovirt.ru] => (item=9090/tcp) 
-skipping: [monitoring.ovirt.ru] => (item=9093/tcp) 
-skipping: [monitoring.ovirt.ru] => (item=9094/tcp) 
-skipping: [monitoring.ovirt.ru] => (item=9100/tcp) 
-skipping: [monitoring.ovirt.ru] => (item=9094/udp) 
+TASK [monitoring : Allow Ports] ***************************************************************************************************************************************
+skipping: [monitoring.ru-devops.ru] => (item=9090/tcp) 
+skipping: [monitoring.ru-devops.ru] => (item=9093/tcp) 
+skipping: [monitoring.ru-devops.ru] => (item=9094/tcp) 
+skipping: [monitoring.ru-devops.ru] => (item=9100/tcp) 
+skipping: [monitoring.ru-devops.ru] => (item=9094/udp) 
 
-TASK [monitoring : Disable SELinux] *********************************************************************************************************************************************
-skipping: [monitoring.ovirt.ru]
+TASK [monitoring : Disable SELinux] ***********************************************************************************************************************************
+skipping: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Stop SELinux] ************************************************************************************************************************************************
-skipping: [monitoring.ovirt.ru]
+TASK [monitoring : Stop SELinux] **************************************************************************************************************************************
+skipping: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Allow TCP Ports] *********************************************************************************************************************************************
-ok: [monitoring.ovirt.ru] => (item=9090)
-ok: [monitoring.ovirt.ru] => (item=9093)
-ok: [monitoring.ovirt.ru] => (item=9094)
-ok: [monitoring.ovirt.ru] => (item=9100)
+TASK [monitoring : Allow TCP Ports] ***********************************************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item=9090)
+changed: [monitoring.ru-devops.ru] => (item=9093)
+changed: [monitoring.ru-devops.ru] => (item=9094)
+changed: [monitoring.ru-devops.ru] => (item=9100)
 
-TASK [monitoring : Allow UDP Ports] *********************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [monitoring : Allow UDP Ports] ***********************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create the prometheus group] *********************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [monitoring : Create the prometheus group] ***********************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create User prometheus] **************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [monitoring : Create User prometheus] ****************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create directories for prometheus] ***************************************************************************************************************************
-ok: [monitoring.ovirt.ru] => (item=/tmp/prometheus)
-ok: [monitoring.ovirt.ru] => (item=/etc/prometheus)
-ok: [monitoring.ovirt.ru] => (item=/var/lib/prometheus)
+TASK [monitoring : Create directories for prometheus] *****************************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item=/tmp/prometheus)
+changed: [monitoring.ru-devops.ru] => (item=/etc/prometheus)
+changed: [monitoring.ru-devops.ru] => (item=/var/lib/prometheus)
 
-TASK [monitoring : Download And Unzipped Prometheus] ****************************************************************************************************************************
-skipping: [monitoring.ovirt.ru]
+TASK [monitoring : Download And Unzipped Prometheus] ******************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Copy Bin Files From Unzipped to Prometheus] ******************************************************************************************************************
-ok: [monitoring.ovirt.ru] => (item=prometheus)
-ok: [monitoring.ovirt.ru] => (item=promtool)
+TASK [monitoring : Copy Bin Files From Unzipped to Prometheus] ********************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item=prometheus)
+changed: [monitoring.ru-devops.ru] => (item=promtool)
 
-TASK [monitoring : Copy Conf Files From Unzipped to Prometheus] *****************************************************************************************************************
-changed: [monitoring.ovirt.ru] => (item=console_libraries)
-changed: [monitoring.ovirt.ru] => (item=consoles)
+TASK [monitoring : Copy Conf Files From Unzipped to Prometheus] *******************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item=console_libraries)
+changed: [monitoring.ru-devops.ru] => (item=consoles)
 
-TASK [monitoring : Create File for Prometheus Systemd] **************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : Create File for Prometheus Systemd] ****************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : copy config] *************************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : copy config] ***************************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : copy alert] **************************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : copy alert] ****************************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Systemctl Prometheus Start] **********************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : Systemctl Prometheus Start] ************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create the alertmanager group] *******************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [monitoring : Create the alertmanager group] *********************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create User Alertmanager] ************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [monitoring : Create User Alertmanager] **************************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create Directories For Alertmanager] *************************************************************************************************************************
-changed: [monitoring.ovirt.ru] => (item=/tmp/alertmanager)
-changed: [monitoring.ovirt.ru] => (item=/etc/alertmanager)
-changed: [monitoring.ovirt.ru] => (item=/var/lib/prometheus/alertmanager)
+TASK [monitoring : Create Directories For Alertmanager] ***************************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item=/tmp/alertmanager)
+changed: [monitoring.ru-devops.ru] => (item=/etc/alertmanager)
+changed: [monitoring.ru-devops.ru] => (item=/var/lib/prometheus/alertmanager)
 
-TASK [monitoring : Download And Unzipped Alertmanager] **************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : Download And Unzipped Alertmanager] ****************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Copy Bin Files From Unzipped to Alertmanager] ****************************************************************************************************************
-changed: [monitoring.ovirt.ru] => (item=alertmanager)
-changed: [monitoring.ovirt.ru] => (item=amtool)
+TASK [monitoring : Copy Bin Files From Unzipped to Alertmanager] ******************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item=alertmanager)
+changed: [monitoring.ru-devops.ru] => (item=amtool)
 
-TASK [monitoring : Copy Conf File From Unzipped to Alertmanager] ****************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : Copy Conf File From Unzipped to Alertmanager] ******************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : copy config] *************************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : copy config] ***************************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Create File for Alertmanager Systemd] ************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : Create File for Alertmanager Systemd] **************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [monitoring : Systemctl Alertmanager Start] ********************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [monitoring : Systemctl Alertmanager Start] **********************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : Install dependencies] *******************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [grafana : Install dependencies] *********************************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [grafana : Allow TCP Ports] ************************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : Allow TCP Ports] **************************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : Import Grafana Apt Key] *****************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : Import Grafana Apt Key] *******************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : Add APT Repository] *********************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : Add APT Repository] ***********************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : Install Grafana on Debian Family] *******************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : Install Grafana on Debian Family] *********************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : start service grafana-server] ***********************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : start service grafana-server] *************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : wait for service up] ********************************************************************************************************************************************
-FAILED - RETRYING: [monitoring.ovirt.ru]: wait for service up (120 retries left).
-FAILED - RETRYING: [monitoring.ovirt.ru]: wait for service up (119 retries left).
-FAILED - RETRYING: [monitoring.ovirt.ru]: wait for service up (118 retries left).
-ok: [monitoring.ovirt.ru]
+TASK [grafana : wait for service up] **********************************************************************************************************************************
+FAILED - RETRYING: [monitoring.ru-devops.ru]: wait for service up (120 retries left).
+ok: [monitoring.ru-devops.ru]
 
-TASK [grafana : change admin password for Grafana gui] **************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [grafana : change admin password for Grafana gui] ****************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [grafana : Create/Update datasources file (provisioning)] ******************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : Create/Update datasources file (provisioning)] ********************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : Create local grafana dashboard directory] ***********************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [grafana : Create local grafana dashboard directory] *************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [grafana : create grafana dashboards data directory] ***********************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : create grafana dashboards data directory] *************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : download grafana dashboard from grafana.net to local directory] *************************************************************************************************
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '3662', 'revision_id': '2', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '9578', 'revision_id': '4', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '9628', 'revision_id': '7', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '1860', 'revision_id': '27', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '4271', 'revision_id': '4', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '7362', 'revision_id': '5', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '2428', 'revision_id': '7', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '15211', 'revision_id': '1', 'datasource': 'Prometheus'})
+TASK [grafana : download grafana dashboard from grafana.net to local directory] ***************************************************************************************
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '3662', 'revision_id': '2', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '9578', 'revision_id': '4', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '9628', 'revision_id': '7', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '1860', 'revision_id': '27', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '4271', 'revision_id': '4', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '7362', 'revision_id': '5', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '2428', 'revision_id': '7', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '15211', 'revision_id': '1', 'datasource': 'Prometheus'})
 
-TASK [grafana : Set the correct data source name in the dashboard] **************************************************************************************************************
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '3662', 'revision_id': '2', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '9578', 'revision_id': '4', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '9628', 'revision_id': '7', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '1860', 'revision_id': '27', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '4271', 'revision_id': '4', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '7362', 'revision_id': '5', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '2428', 'revision_id': '7', 'datasource': 'Prometheus'})
-ok: [monitoring.ovirt.ru] => (item={'dashboard_id': '15211', 'revision_id': '1', 'datasource': 'Prometheus'})
+TASK [grafana : Set the correct data source name in the dashboard] ****************************************************************************************************
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '3662', 'revision_id': '2', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '9578', 'revision_id': '4', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '9628', 'revision_id': '7', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '1860', 'revision_id': '27', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '4271', 'revision_id': '4', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '7362', 'revision_id': '5', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '2428', 'revision_id': '7', 'datasource': 'Prometheus'})
+ok: [monitoring.ru-devops.ru] => (item={'dashboard_id': '15211', 'revision_id': '1', 'datasource': 'Prometheus'})
 
-TASK [grafana : Create/Update dashboards file (provisioning)] *******************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+TASK [grafana : Create/Update dashboards file (provisioning)] *********************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-TASK [grafana : Register previously copied dashboards] **************************************************************************************************************************
-skipping: [monitoring.ovirt.ru]
+TASK [grafana : Register previously copied dashboards] ****************************************************************************************************************
+skipping: [monitoring.ru-devops.ru]
 
-TASK [grafana : Register dashboards to copy] ************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+TASK [grafana : Register dashboards to copy] **************************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-TASK [grafana : Import grafana dashboards] **************************************************************************************************************************************
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/9578.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 307942, 'inode': 400382, 'dev': 64514, 'nlink': 1, 'atime': 1662763957.9240286, 'mtime': 1662763947.9880037, 'ctime': 1662763947.9880037, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/4271.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 33577, 'inode': 400384, 'dev': 64514, 'nlink': 1, 'atime': 1662763960.7280357, 'mtime': 1662763960.7280357, 'ctime': 1662763960.7280357, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/9628.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 71832, 'inode': 400381, 'dev': 64514, 'nlink': 1, 'atime': 1662763958.860031, 'mtime': 1662763958.860031, 'ctime': 1662763958.860031, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/3662.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 85558, 'inode': 400389, 'dev': 64514, 'nlink': 1, 'atime': 1662763956.972026, 'mtime': 1662763956.972026, 'ctime': 1662763956.972026, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/1860.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 387696, 'inode': 400383, 'dev': 64514, 'nlink': 1, 'atime': 1662763959.7920332, 'mtime': 1662763959.7920332, 'ctime': 1662763959.7920332, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/7362.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 129775, 'inode': 400385, 'dev': 64514, 'nlink': 1, 'atime': 1662763962.7360406, 'mtime': 1662763962.7360406, 'ctime': 1662763962.7360406, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/15211.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 78766, 'inode': 400388, 'dev': 64514, 'nlink': 1, 'atime': 1662763964.7080455, 'mtime': 1662763955.712023, 'ctime': 1662763955.712023, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
-changed: [monitoring.ovirt.ru] => (item={'path': '/tmp/ansible.5_jq0h_0/2428.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 122985, 'inode': 400386, 'dev': 64514, 'nlink': 1, 'atime': 1662763963.7240431, 'mtime': 1662763963.7240431, 'ctime': 1662763963.7240431, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+TASK [grafana : Import grafana dashboards] ****************************************************************************************************************************
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/9578.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 307942, 'inode': 151236, 'dev': 64514, 'nlink': 1, 'atime': 1664703886.7859037, 'mtime': 1664703844.9375565, 'ctime': 1664703844.9375565, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/4271.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 33577, 'inode': 266967, 'dev': 64514, 'nlink': 1, 'atime': 1664703905.4220545, 'mtime': 1664703905.4220545, 'ctime': 1664703905.4220545, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/9628.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 71832, 'inode': 266965, 'dev': 64514, 'nlink': 1, 'atime': 1664703891.5499425, 'mtime': 1664703891.5499425, 'ctime': 1664703891.5499425, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/3662.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 85558, 'inode': 266964, 'dev': 64514, 'nlink': 1, 'atime': 1664703882.0338647, 'mtime': 1664703882.0338647, 'ctime': 1664703882.0338647, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/1860.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 387756, 'inode': 266966, 'dev': 64514, 'nlink': 1, 'atime': 1664703896.7579846, 'mtime': 1664703896.7579846, 'ctime': 1664703896.7579846, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/7362.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 129775, 'inode': 266968, 'dev': 64514, 'nlink': 1, 'atime': 1664703913.1501167, 'mtime': 1664703913.1501167, 'ctime': 1664703913.1501167, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/15211.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 78766, 'inode': 151242, 'dev': 64514, 'nlink': 1, 'atime': 1664703923.0501955, 'mtime': 1664703876.6298203, 'ctime': 1664703876.6298203, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
+changed: [monitoring.ru-devops.ru] => (item={'path': '/tmp/ansible.lm2j_9un/2428.json', 'mode': '0644', 'isdir': False, 'ischr': False, 'isblk': False, 'isreg': True, 'isfifo': False, 'islnk': False, 'issock': False, 'uid': 0, 'gid': 0, 'size': 122996, 'inode': 266969, 'dev': 64514, 'nlink': 1, 'atime': 1664703918.3061578, 'mtime': 1664703918.3061578, 'ctime': 1664703918.3061578, 'gr_name': 'root', 'pw_name': 'root', 'wusr': True, 'rusr': True, 'xusr': False, 'wgrp': False, 'rgrp': True, 'xgrp': False, 'woth': False, 'roth': True, 'xoth': False, 'isuid': False, 'isgid': False})
 
-TASK [grafana : Get dashboard lists] ********************************************************************************************************************************************
-skipping: [monitoring.ovirt.ru]
+TASK [grafana : Get dashboard lists] **********************************************************************************************************************************
+skipping: [monitoring.ru-devops.ru]
 
-TASK [grafana : Remove dashboards not present on deployer machine (synchronize)] ************************************************************************************************
-skipping: [monitoring.ovirt.ru]
+TASK [grafana : Remove dashboards not present on deployer machine (synchronize)] **************************************************************************************
+skipping: [monitoring.ru-devops.ru]
 
-RUNNING HANDLER [monitoring : restart prometheus] *******************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+RUNNING HANDLER [monitoring : restart prometheus] *********************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-RUNNING HANDLER [monitoring : restart alertmanager] *****************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+RUNNING HANDLER [monitoring : restart alertmanager] *******************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-RUNNING HANDLER [grafana : grafana systemd] *************************************************************************************************************************************
-ok: [monitoring.ovirt.ru]
+RUNNING HANDLER [grafana : grafana systemd] ***************************************************************************************************************************
+ok: [monitoring.ru-devops.ru]
 
-RUNNING HANDLER [grafana : restart grafana] *************************************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+RUNNING HANDLER [grafana : restart grafana] ***************************************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-RUNNING HANDLER [grafana : Set privileges on provisioned dashboards] ************************************************************************************************************
-changed: [monitoring.ovirt.ru]
+RUNNING HANDLER [grafana : Set privileges on provisioned dashboards] **************************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-RUNNING HANDLER [grafana : Set privileges on provisioned dashboards directory] **************************************************************************************************
-changed: [monitoring.ovirt.ru]
+RUNNING HANDLER [grafana : Set privileges on provisioned dashboards directory] ****************************************************************************************
+changed: [monitoring.ru-devops.ru]
 
-PLAY RECAP **********************************************************************************************************************************************************************
-monitoring.ovirt.ru        : ok=43   changed=26   unreachable=0    failed=0    skipped=8    rescued=0    ignored=0
+PLAY RECAP ************************************************************************************************************************************************************
+monitoring.ru-devops.ru    : ok=44   changed=33   unreachable=0    failed=0    skipped=7    rescued=0    ignored=0   
+
+iurii-devops@Host-SPB:~/PycharmProjects/diplom/terraform.tfstate.d/ansible$ 
 
 ```
 
